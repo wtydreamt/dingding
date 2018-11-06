@@ -1,0 +1,70 @@
+<div>
+	<div class="t-collapse" role="tablist" >
+		{volist name="office" id="val"}
+			{if condition="isset($user[$val['dingding_id']])"}
+		<div class="t-collapse-item" id="ding_{$val.dingding_id}" sun="1">
+			{else /}
+		<div class="t-collapse-item" id="ding_{$val.dingding_id}" sun="0">
+			{/if}
+			<div class="t-collapse-header parent" aria-expanded="false" data="{$val.dingding_id}" style="text-align:center;background-color: #F8F8FF" role="tab" tabindex="0">
+				<i class="arrow"></i>
+				<span >{$val.name}</span>
+			</div>
+			{if condition="isset($user[$val['dingding_id']])"}
+				{volist name="user[$val['dingding_id']]" id="uv"}
+				<div class="t-collapse-content t-collapse-content-inactive t-collapse-header item-list_{$val.dingding_id}" role="tabpanel">
+					<div class="t-collapse-header">
+						<span >{$uv.name}</span>({$val.name})
+					</div>
+				</div>
+				{/volist}	
+			{/if}			
+		
+		</div>
+		{/volist}
+
+
+<!-- 		<div class="t-collapse-item" >
+			<div class="t-collapse-header" aria-expanded="false" style="text-align:center" role="tab" tabindex="0">
+				<i class="arrow"></i>
+				<span >自定义头</span>
+			</div>
+		</div>		
+		<div class="t-collapse-item t-collapse-item-active" >
+			<div class="t-collapse-header" aria-expanded="true" style="text-align:center" role="tab" tabindex="0">
+				<i class="arrow"></i>
+				<span >纯字符串头</span>
+			</div>
+		</div> -->
+	</div>
+</div>
+
+<script>
+	$(function(){
+		$(".parent").click(function(){
+			var dingding_id = $(this).attr("data");
+			var obj = $("#ding_"+dingding_id);
+			var css = obj.hasClass("t-collapse-item-active");
+			var sun = obj.attr("sun");
+			
+			if(sun !=0 && !css){
+				obj.siblings().attr("class","t-collapse-item");
+				obj.siblings().find(".t-collapse-content").attr("ria-expanded",false);
+				obj.siblings().find(".t-collapse-content").hide();
+				obj.attr("class","t-collapse-item t-collapse-item-active");
+				$(".item-list_"+dingding_id).show();
+				$(".item-list_"+dingding_id).attr("ria-expanded",true);
+			}
+			if(sun !=0 && css){
+				obj.attr("class","t-collapse-item");
+				$(".item-list_"+dingding_id).hide();
+				$(".item-list_"+dingding_id).attr("ria-expanded",false);
+			}
+		})
+	})
+</script>
+
+
+
+
+

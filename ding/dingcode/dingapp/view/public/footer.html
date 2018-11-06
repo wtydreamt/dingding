@@ -1,0 +1,148 @@
+<style>
+    .nav {
+        background-color: #FFFFFF;
+        border-top: 1px solid rgba(31, 56, 88, .1);
+        line-height: 1;
+        height: 48px;
+    }
+
+    .nav-text {
+        display: block;
+        font-size: 10px;
+        line-height: 12px;
+        padding-top: 5px
+    }
+
+    .nav-i {
+        font-size: 1.4rem;
+    }
+
+    .nav-color {
+        color: rgba(31,56,88,.4);
+    }
+
+    .layui-anim {
+        -webkit-animation-duration: .3s;
+        animation-duration: .3s;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+    }
+</style>
+
+<div class="container-fluid" style="padding-top: 68px">
+    <nav class="navbar navbar-light fixed-bottom nav">
+        <a href="/?dd_nav_bgcolor=FF5E97F6&corpid={:get_corpid()}" class="navbar-brand link-new">
+            <div class="text-center nav-color" id="nav-code-code_index">
+                <i class="fas fa-globe card-img-top nav-i"></i>
+                <p class="card-text nav-text">首页</p>
+            </div>
+        </a>
+
+        <a href="/Workbench?dd_nav_bgcolor=FF5E97F6" class="navbar-brand layui-anim link-new">
+            <div class="text-center nav-color" id="nav-code-code_workspace">
+                <i class="fas fa-tachometer-alt card-img-top nav-i"></i>
+                <p class="card-text nav-text">工作台</p>
+            </div>
+        </a>
+
+        <a href="/Myindex?dd_nav_bgcolor=FF5E97F6" class="navbar-brand link-new">
+            <div class="text-center nav-color" id="nav-code-code_my">
+                <i class="far fa-user card-img-top nav-i"></i>
+                <p class="card-text nav-text">我的</p>
+            </div>
+        </a>
+    </nav>
+</div>
+
+<script>
+    $(function () {
+        unpullToRefresh()
+
+        $('.link').on('click', function () {
+            var url = $(this).attr('data-url')
+            window.location.href = url
+            //openLinkRep(url)
+        })
+        $('.link-new').on('click', function () {
+            var url = $(this).attr('data-url')
+            window.location.href = url
+            //openLinkRep(url)
+        })
+
+
+            dd.ready(function () {
+                dd.biz.navigation.setRight({
+                    show     : true,//控制按钮显示， true 显示， false 隐藏， 默认true
+                    control  : false,//是否控制点击事件，true 控制，false 不控制， 默认false
+                    text     : '',//控制显示文本，空字符串表示显示默认文本
+                    onSuccess: function (result) {},
+                    onFail   : function (err) {}
+                })
+            })
+
+
+//        dd.ready(function () {
+//            dd.ui.webViewBounce.enable()
+//        })
+    })
+
+    function openLink (url) {
+        window.location.href = url
+    }
+    function openLinkRep (url) {
+        window.location.href = url
+    }
+
+    function dalert (msg) {
+        dd.ready(function () {
+            dd.device.notification.alert({
+                message   : msg,
+                title     : '提示',
+                buttonName: '好的',
+                onSuccess : function () {},
+                onFail    : function (err) {}
+            })
+        })
+    }
+    function dtoast (icon, text) {
+        dd.ready(function () {
+            dd.device.notification.toast({
+                icon     : icon, //icon样式，有success和error，默认为空 0.0.2
+                text     : text, //提示信息
+                duration : 2, //显示持续时间，单位秒，默认按系统规范[android只有两种(<=2s >2s)]
+                delay    : 0, //延迟显示，单位秒，默认0
+                onSuccess: function (result) {},
+                onFail   : function (err) {}
+            })
+        })
+    }
+
+// 
+
+    function dwait () {
+        dd.ready(function () {
+            dd.device.notification.showPreloader({
+                text     : '使劲加载中..',
+                showIcon : true,
+                onSuccess: function (result) {},
+                onFail   : function (err) {}
+            })
+        })
+    }
+    function dwaith () {
+        dd.ready(function () {
+            dd.device.notification.hidePreloader({
+                onSuccess: function (result) {},
+                onFail   : function (err) {}
+            })
+        })
+    }
+
+    function unpullToRefresh () {
+        dd.ready(function () {
+            dd.ui.pullToRefresh.disable()
+        })
+    }
+</script>
+</body>
+</html>

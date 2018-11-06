@@ -1,0 +1,179 @@
+<style>
+    body {
+        overflow-x: hidden;
+    }
+
+    .demo {
+        width: 90px;
+        height: 90px;
+        text-align: center;
+        display: -webkit-flex;
+        -webkit-align-items: center;
+        -webkit-justify-content: center;
+        flex-direction: column;
+    }
+
+    .menu-title {
+        /*font-size: 12px;*/
+        margin-top: 10px;
+        color: #333;
+    }
+
+    .demo-cell {
+        height: 80px;
+    }
+
+    .icon-round {
+        border-radius: 4px;
+        background-color: #eee;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+    }
+
+    .icon-desc h5 {
+        font-size: 13px;
+    }
+    .icon-desc p {
+        font-size: 11px;
+        color: #666;
+        margin-top: 6px;
+    }
+</style>
+
+<div>
+    <img style="height: 100%; width: 100%" src="/static/app/img/bander/workspace-top.jpg" alt="">
+</div>
+
+<div class="t-grid t-BCf t-MB30 t-no-line t-grid-touchable">
+
+    <div class="t-grid-row t-FBH">
+
+<!--        t-grid-item-->
+	<div class="t-FBV t-FB1 t-FBJC t-FBAC  link" data-url="">
+            <div class="demo">
+                <div style="display:inline-block;line-height:0;" class="t-icon t-svg">
+                    <div style="position:relative;">
+                        <i class="fas fa-align-left" style="color: #be4bdb; font-size: 1.4rem; padding-top: 5px; width: 32px; height: 32px"></i>
+                        <div style="position:absolute;top:0;left:0;width:100%;height:100%;" class="t-icon-mask"></div>
+                    </div>
+                </div>
+                <div class="menu-title">积分排名</div>
+            </div>
+        </div>
+
+	<div class="t-FBV t-FB1 t-FBJC t-FBAC  link" data-url="">
+            <div class="demo">
+                <div style="display:inline-block;line-height:0;" class="t-icon t-svg">
+                    <div style="position:relative;">
+                        <i class="fas fa-book" style="color: #fd7e14; font-size: 1.4rem; padding-top: 5px; width: 32px; height: 32px"></i>
+                        <div style="position:absolute;top:0;left:0;width:100%;height:100%;" class="t-icon-mask"></div>
+                    </div>
+                </div>
+                <div class="menu-title">奖扣申请</div>
+            </div>
+        </div>
+
+    <div class="t-FBV t-FB1 t-FBJC t-FBAC  link" data-url="">
+            <div class="demo">
+                <div style="display:inline-block;line-height:0;" class="t-icon t-svg">
+                    <div style="position:relative;">
+                        <i class="fas fa-thumbs-up" style="color: #f783ac; font-size: 1.4rem; padding-top: 5px; width: 32px; height: 32px"></i>
+                        <div style="position:absolute;top:0;left:0;width:100%;height:100%;" class="t-icon-mask"></div>
+                    </div>
+                </div>
+                <div class="menu-title">点赞</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="t-grid-row t-FBH">
+
+	<div class="t-FBV t-FB1 t-FBJC t-FBAC  link" data-url="">
+            <div class="demo">
+                <div style="display:inline-block;line-height:0;" class="t-icon t-svg">
+                    <div style="position:relative;">
+                        <i class="fas fa-list-ul" style="color: #03e59b; font-size: 1.4rem; padding-top: 5px; width: 32px; height: 32px"></i>
+                        <div style="position:absolute;top:0;left:0;width:100%;height:100%;" class="t-icon-mask"></div>
+                    </div>
+                </div>
+                <div class="menu-title">奖扣记录</div>
+            </div>
+        </div>
+
+	<div class="t-FBV t-FB1 t-FBJC t-FBAC  link" data-url="exchange">
+            <div class="demo">
+                <div style="display:inline-block;line-height:0;" class="t-icon t-svg">
+                    <div style="position:relative;">
+                        <i class="fas fa-gift" style="color: #15aabf; font-size: 1.4rem; padding-top: 5px; width: 32px; height: 32px"></i>
+                        <div style="position:absolute;top:0;left:0;width:100%;height:100%;" class="t-icon-mask"></div>
+                    </div>
+                </div>
+                <div class="menu-title">兑换中心</div>
+            </div>
+        </div>
+
+	<div class="t-FBV t-FB1 t-FBJC t-FBAC  link" data-url="">
+            <div class="demo">
+                <div style="display:inline-block;line-height:0;" class="t-icon t-svg">
+                    <div style="position:relative;">
+                        <i class="fas fa-user" style="color: #f76356; font-size: 1.4rem; padding-top: 5px; width: 32px; height: 32px"></i>
+                        <div style="position:absolute;top:0;left:0;width:100%;height:100%;" class="t-icon-mask"></div>
+                    </div>
+                </div>
+                <div class="menu-title">我的审核</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="t-grid-row t-FBH">
+
+        <div class="t-FBV t-FB1 t-FBJC t-FBAC t-grid-item" style="display: none">
+            <div class="demo">
+                <div style="display:inline-block;line-height:0;" class="t-icon t-svg">
+                    <div style="position:relative;">
+                        <i class="fab fa-gratipay" style="color: #49f2d8; font-size: 1.4rem; padding-top: 5px; width: 32px; height: 32px"></i>
+                        <div style="position:absolute;top:0;left:0;width:100%;height:100%;" class="t-icon-mask"></div>
+                    </div>
+                </div>
+                <div class="menu-title">生日榜</div>
+            </div>
+        </div>
+
+        <div class="t-FBV t-FB1 t-FBJC t-FBAC t-grid-item" style="display: none">
+            <div class="demo">
+                <div style="display:inline-block;line-height:0;" class="t-icon t-svg">
+                    <div style="position:relative;">
+                        <i class="fas fa-calendar" style="color: #229ddb; font-size: 1.4rem; padding-top: 5px; width: 32px; height: 32px"></i>
+                        <div style="position:absolute;top:0;left:0;width:100%;height:100%;" class="t-icon-mask"></div>
+                    </div>
+                </div>
+                <div class="menu-title">订单</div>
+            </div>
+        </div>
+
+        <div class="t-FBV t-FB1 t-FBJC t-FBAC t-grid-item" style="display: none">
+            <div class="demo">
+                <div style="display:inline-block;line-height:0;" class="t-icon t-svg">
+                    <div style="position:relative;">
+                        <i class="fas fa-clock" style="color: #87db11; font-size: 1.4rem; padding-top: 5px; width: 32px; height: 32px"></i>
+                        <div style="position:absolute;top:0;left:0;width:100%;height:100%;" class="t-icon-mask"></div>
+                    </div>
+                </div>
+                <div class="menu-title">考勤</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#nav-code-code_index').css('color', 'rgba(31,56,88,.4)')
+        $('#nav-code-code_workspace').css('color', '#38adff')
+        $('#nav-code-code_my').css('color', 'rgba(31,56,88,.4)')
+
+        dwaith()
+    })
+</script>

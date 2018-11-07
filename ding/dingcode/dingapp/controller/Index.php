@@ -26,8 +26,8 @@ class Index extends Common
     	  }else{
     	  	 session::set("corpid",$corpid);
     	  }
-    	  // $Office=new Office();
-    	  // $Office->Framework();
+    	  $Office=new Office();
+    	  $Office->Framework();
     	  
     	  $config = DingCache::IsvConfig($corpid); 
 

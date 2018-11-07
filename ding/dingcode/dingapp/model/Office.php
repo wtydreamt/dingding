@@ -61,7 +61,7 @@ class Office extends Model
                                  if(!empty($updatelist)){
                                  	$res=model("Office")->saveAll($updatelist);
                                  }
-                                 $this->updateuser($userlit);die;
+                                 $this->updateuser($userlit);
 
 	  		 }else{
 	  		 	 echo $list;

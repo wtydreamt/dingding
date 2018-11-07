@@ -1,3 +1,5 @@
+{include file="public/header" /}
+<style>
 <style>
 	body {
     background-color: #f2f2f2;
@@ -58,55 +60,51 @@
     height : 14rem;
 }
 </style>
-
-<div class="demo2-t-list-wrap" style="height: 100%;">
-	<div class="t-FBH t-FBAC" style="height: 100%;">
-		<div class="t-FBH t-FB1" style="height: 100%;">
-			<div class="demo2-t-list-img-wrap" style="width: 100%;">
-				<img src="https://img.alicdn.com/tps/TB1mKYuJFXXXXbFXpXXXXXXXXXX-375-140.png"  class="demo2-t-list-img" >
+<div id="goods">
+{if condition="(!empty($list))"}
+	{volist name="list" id="val"}
+	<div class="demo2-t-list-wrap" style="height: 100%;">
+		<div class="t-FBH t-FBAC" style="height: 100%;">
+			<div class="t-FBH t-FB1" style="height: 100%;">
+				<div class="demo2-t-list-img-wrap" style="width: 100%;">
+					<img src="https://img.alicdn.com/tps/TB1mKYuJFXXXXbFXpXXXXXXXXXX-375-140.png"  class="demo2-t-list-img" >
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="t-FBH demo3-t-list-title">
-		<div class="t-FB1" >
-			<p class="demo2-t-list-title-content t-omit titles" >一袋抹茶</p>
-		</div>
-		<div class="">
-			<span class="demo2-t-list-time" style="color:red" >500</span>福分
-		</div>
-	</div>
-	<div class="t-FBH demo3-t-list-title">
-		<div class="t-FB1" >
-			<p class="demo2-t-list-title-content t-omit" >一杯抹茶给您带来清新一天</p>
-		</div>
-		<div class="t-button t-button-minor t-button-inline t-button-size-small">
-			<span class="demo2-t-list-time link" data-url="exchange/info?id=1">立即兑换</span>
-		</div>
-	</div>	
-</div>
-
-<div class="demo2-t-list-wrap" style="height: 100%;">
-	<div class="t-FBH t-FBAC" style="height: 100%;">
-		<div class="t-FBH t-FB1" style="height: 100%;">
-			<div class="demo2-t-list-img-wrap" style="width: 100%;">
-				<img src="https://img.alicdn.com/tps/TB1mKYuJFXXXXbFXpXXXXXXXXXX-375-140.png"  class="demo2-t-list-img" >
+		<div class="t-FBH demo3-t-list-title">
+			<div class="t-FB1" >
+				<p class="demo2-t-list-title-content t-omit titles" >{$val.title}</p>
+			</div>
+			<div class="">
+				<span class="demo2-t-list-time" style="color:red" >{$val.price}</span>福分
 			</div>
 		</div>
+		<div class="t-FBH demo3-t-list-title">
+			<div class="t-FB1" >
+				<p class="demo2-t-list-title-content t-omit" >{$val.desc}</p>
+			</div>
+			<div class="t-button t-button-minor t-button-inline t-button-size-small">
+				<span class="demo2-t-list-time links" data-url="/exchange/info?dd_nav_bgcolor=FF5E97F6&id={$val.id}">立即兑换</span>
+			</div>
+		</div>	
 	</div>
-	<div class="t-FBH demo3-t-list-title">
-		<div class="t-FB1" >
-			<p class="demo2-t-list-title-content t-omit titles" >京东E卡</p>
-		</div>
-		<div class="">
-			<span class="demo2-t-list-time" style="color:red" >5000</span>福分
-		</div>
-	</div>
-	<div class="t-FBH demo3-t-list-title">
-		<div class="t-FB1" >
-			<p class="demo2-t-list-title-content t-omit" >E卡在手轻松购物</p>
-		</div>
-		<div class="t-button t-button-minor t-button-inline t-button-size-small">
-			<span class="demo2-t-list-time link" data-url="exchange/info?id=1">立即兑换</span>
-		</div>
-	</div>	
+	{/volist}
+{else /}
+
+{/if}
 </div>
+    <div id="buckle_loading_ok" style="display: none">
+        <div class="t-infinity-scroll loading"><div style="display:inline-block;line-height:0;" class="t-icon t-svg loading-icon"><div style="position:relative;" data-reactid=".2.0.$scrollArea.$icon.0"><svg name="" width="32px" height="32px" fill="#000" preserveAspectRatio="xMidYMid" viewBox="0 0 100 100" data-reactid=".2.0.$scrollArea.$icon.0.0"><path fill="none" d="M0 0h100v100H0z" data-reactid=".2.0.$scrollArea.$icon.0.0.0"></path><rect width="7" height="20" x="46.5" y="40" rx="5" ry="5" transform="translate(0 -30)" data-reactid=".2.0.$scrollArea.$icon.0.0.1"><animate data-reactid=".2.0.$scrollArea.$icon.0.0.1.0"></animate></rect><rect width="7" height="20" x="46.5" y="40" rx="5" ry="5" transform="rotate(30 105.98 65)" data-reactid=".2.0.$scrollArea.$icon.0.0.2"><animate></animate></rect><rect width="7" height="20" x="46.5" y="40" rx="5" ry="5" transform="rotate(60 75.98 65)" data-reactid=".2.0.$scrollArea.$icon.0.0.3"><animate></animate></rect><rect width="7" height="20" x="46.5" y="40" rx="5" ry="5" transform="rotate(90 65 65)"><animate></animate></rect><rect width="7" height="20" x="46.5" y="40" rx="5" ry="5" transform="rotate(120 58.66 65)"><animate></animate></rect><rect width="7" height="20" x="46.5" y="40" rx="5" ry="5" transform="rotate(150 54.02 65)"><animate></animate></rect><rect width="7" height="20" x="46.5" y="40" rx="5" ry="5" transform="rotate(180 50 65)"><animate></animate></rect><rect width="7" height="20" x="46.5" y="40" rx="5" ry="5" transform="rotate(-150 45.98 65)"><animate></animate></rect><rect width="7" height="20" x="46.5" y="40" rx="5" ry="5" transform="rotate(-120 41.34 65)"><animate></animate></rect><rect width="7" height="20" x="46.5" y="40" rx="5" ry="5" transform="rotate(-90 35 65)"><animate></animate></rect><rect width="7" height="20" x="46.5" y="40" rx="5" ry="5" transform="rotate(-60 24.02 65)"><animate></animate></rect><rect width="7" height="20" x="46.5" y="40" rx="5" ry="5" transform="rotate(-30 -5.98 65)"><animate></animate></rect></svg><div style="position:absolute;top:0;left:0;width:100%;height:100%;" class="t-icon-mask" ></div></div></div><div class="loading-text">正在加载...</div></div>
+</div>
+<div id="buckle_loading_no" style="display:none;">
+        <div class="t-infinity-scroll loading">
+            <div style="display:inline-block;line-height:0;" class="t-icon t-svg loading-icon">
+                <div style="position:relative;" data-reactid=".2.0.$scrollArea.$icon.0">
+                    <svg name="" width="32px" height="32px" fill="#000" preserveAspectRatio="xMidYMid" viewBox="0 0 100 100" data-reactid=".2.0.$scrollArea.$icon.0.0">
+                        <path fill="none" d="M0 0h100v100H0z" data-reactid=".2.0.$scrollArea.$icon.0.0.0"></path>
+                    </svg><div style="position:absolute;top:0;left:0;width:100%;height:100%;" class="t-icon-mask" >
+                    </div></div></div><div class="loading-text">已经全部加载喽！</div></div>
+</div>
+<script src="/static/app/dingcode/exchange.js"></script>
+
+

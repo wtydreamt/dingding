@@ -61,7 +61,7 @@ class User extends Model
 	        ->alias('u')
 	        ->where("dd_id",$userid)
 	        ->where("u.cust_id",$corpid)
-	        ->join('office o ','o.dingding_id = u.office_id ')
+	        ->join('dingding_office o ','o.dingding_id = u.office_id ')
 	        ->where("o.cust_id",$corpid)
 	        ->field("u.name,u.dd_avatar,o.name as o_name,u.dd_avatar")->find();
 	        return $user;	  	     

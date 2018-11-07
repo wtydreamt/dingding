@@ -18,6 +18,9 @@ Route::rule("getuser","dingapp/index/getuser");     //授权获取用户信息
 Route::rule("myindex","dingapp/Myindex/index");     //我的个人中心
 Route::rule("framework","dingapp/Myindex/framework");     //组织架构
 
+//赞赏
+Route::rule("fabulous","dingapp/Fabulous/index");     //组织架构
+
 //工作台
 Route::rule("workbench","dingapp/Workbench/index"); //工作台
 

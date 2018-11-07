@@ -14,13 +14,13 @@ return [
        // 数据库类型
        'type'            => 'mysql',
        // 服务器地址
-       'hostname'        => '47.106.139.52',
+       'hostname'        => '60.205.191.164',
        // 数据库名
-       'database'        => 'dingcode',
+       'database'        => 'cloud_dingcode',
        // 用户名
-       'username'        => 'root',
+       'username'        => 'changyue',
        // 密码
-       'password'        => 'root',
+       'password'        => 'cykjdev164123',
        // 端口
        'hostport'        => '',
        // 连接dsn

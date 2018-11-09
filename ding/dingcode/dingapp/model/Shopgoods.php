@@ -32,4 +32,13 @@ class Shopgoods extends Model
 
 	  }
 
+	  public function check($id){
+
+	  	     $corpid  = Session::get("corpid");
+
+	  	     $goods =model("Shopgoods")->where("id",$id)->where("corp_id",$corpid)->field("price,total")->find();
+
+	  	     return $goods;
+
+	  }
 }

@@ -1,33 +1,56 @@
 <style type="text/css">
+	body {
+    background-color: #f2f2f2;
+}
 #container {
 width:100%;
 margin:0 auto;
 margin-top:10px;
 padding-right:3px;
-position:relative;
+height: 8.5rem;
+background-color: #fff;
 }
-#leftContent {
-position:absolute;
-top:4px;
-left:4px;
-}
+
 #leftContent img{
-height:100px;
+height:6rem;
 width:30%;
 border:1px solid #ccc;
 padding:2px;
 border-radius:5px;
+margin-left: 2%;
+float:left;
 }
 #rightContent {
-margin-left:120px;
+ width:64%;
+ height: 6rem;
+ top:4px;
+ border-top:1px solid #ccc;
+ float:right;
+ margin-right: 2.5%;
+ text-align: center;
+ line-height: 6rem;
 }
 </style>
-<div id="container">
-	<div id="leftContent">
-		<img src="https://img.alicdn.com/tps/TB1mKYuJFXXXXbFXpXXXXXXXXXX-375-140.png">
+
+{if condition="(!empty($record))"}
+	{volist name="record" id="val"}
+	<div id="container">
+		<div style="height: 2.5rem;width:95%;margin-left: 2.5%;padding-top: 4%">
+			<span style="float:left;margin-left:2% ">{$val.goods_name}</span>
+			<span style="float:right;margin-right:2% ">{$val.status}</span>
+		</div>
+		<div id="leftContent">
+			<img src="https://img.alicdn.com/tps/TB1mKYuJFXXXXbFXpXXXXXXXXXX-375-140.png">
+		</div>
+		<div id="rightContent">
+			  <span style="float:right">福分：<span style="color:red">{$val.integral}</span></span>
+		</div>
+
 	</div>
-<div id="rightContent">
-	  900福分
-</div>
-</div>
-</div>
+	<div style="height: 2rem;width:100%;padding-left: 2.5%; line-height: 2rem;background-color: #fff;">
+		<span>{$val.create_time}</span>
+	</div>
+	{/volist}
+{else /}
+
+{/if}

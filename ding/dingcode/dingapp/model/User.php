@@ -12,12 +12,12 @@ class User extends Model
 	  public function UserRegister($userinfo){
 
 	  	     $data = json_decode($userinfo,true);
+
 	  	     $cust_id = session::get("corpid");
 
 	  	     if($data['errmsg']  == "ok"){
 
 	  	     	$res = Db::table("sys_user")->where("cust_id", $cust_id)->where("dd_id", $data['userid'])->field('id')->find();
-	  	     	
 	  	     	if($res){
 
 	  	     		session::set($cust_id."userid",$data['userid']);
@@ -37,10 +37,14 @@ class User extends Model
 	  	     		$res_u=Db::table("sys_user")->insert($user);
 
 	  	     		if($res_u){
+
 	  	     			session::set($cust_id."userid",$data['userid']);
 	  	     			return ReturnJosn("ok","D_200","注册成功");
+	  	     			
 	  	     		}else{
+
 	  	     			return ReturnJosn("ok","D_400","注册失败");
+
 	  	     		}
 
 	  	     	}

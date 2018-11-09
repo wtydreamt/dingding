@@ -29,6 +29,9 @@ Route::rule("workbench","dingapp/Workbench/index"); //工作台
 Route::rule("exchange","dingapp/Exchange/index");   //兑换中心
 Route::rule("exchange/info","dingapp/Exchange/info"); //商品兑换详情
 Route::rule("exchange/record","dingapp/Exchange/record"); //兑换记录
+Route::rule("testing","dingapp/Exchange/testing"); //兑换积分检查
+
+Route::rule("inserrecord","dingapp/Exchange/inserrecord");
 
 //接口路由
 Route::rule("api/corpid","dingapi/api/index");

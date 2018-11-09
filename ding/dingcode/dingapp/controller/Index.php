@@ -26,8 +26,6 @@ class Index extends Common
     	  }else{
     	  	 session::set("corpid",$corpid);
     	  }
-    	  $Office=new Office();
-    	  $Office->Framework();
     	  
     	  $config = DingCache::IsvConfig($corpid); 
 
@@ -38,11 +36,12 @@ class Index extends Common
 	//获取用户注册信息
 	public function getuser($corpid="" ,$code="" ){
 
-		  	     $user=DingCache::get_user($corpid,$code);
-		  	     $user=json_decode($user,true);
-		  	     $userinfo=DingCache::get_user_info($corpid,$user['userid']);
-		  	     $user = new User();
-		  	     echo $res=$user->UserRegister($userinfo);		     	
+
+			  	     $user=DingCache::get_user($corpid,$code);
+			  	     $user=json_decode($user,true);
+			  	     $userinfo=DingCache::get_user_info($corpid,$user['userid']);
+			  	     $user = new User();
+			  	     echo $res=$user->UserRegister($userinfo);		
 
 	}
 

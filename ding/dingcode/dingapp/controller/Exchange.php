@@ -3,6 +3,7 @@ namespace app\dingapp\controller;
 use app\common\controller\Common;
 use app\dingapp\model\User;
 use think\view;
+use think\Session;
 class Exchange extends Common
 {
 	private $Ding = "";
@@ -35,6 +36,7 @@ class Exchange extends Common
 
 
     public function info($id = ""){
+
         $this->view->engine->layout(false); 
         $info = model("shopgoods")->GoodsInfo($id);
         $view = new View();
@@ -44,8 +46,44 @@ class Exchange extends Common
 
     }
 
+    public function testing($id,$num){
+           $corpid = session::get("corpid");
+           $userid = session::get($corpid."userid");
+           $goods = model("Shopgoods")->check($id);
+           //商品不存在
+           if(!$goods){
+            echo   ReturnJosn("G_no","400","");die;
+           }
+           $count_balance = $num * $goods['price'];
+           if($goods['total'] < $num){
+            echo   ReturnJosn("G_ok","404",array("balance"=>$count_balance,"msg"=>"商品库存不足"));die;
+           }
+           $user  = model("user")->where("cust_id",$corpid)->where("dd_id",$userid)->field("balance")->find();
+           if($user['balance']*100 < $count_balance){
+            echo   ReturnJosn("G_ok","405",array("balance"=>$count_balance,"msg"=>"账户福分不足"));die;
+           }
+           $Account=model("Account")->CheckBalance();
+
+           if($Account['balance']*100 > $count_balance){
+             echo   ReturnJosn("G_ok","200",array("balance"=>$count_balance,"msg"=>"true"));die;
+           }else{
+             echo   ReturnJosn("G_ok","406",array("balance"=>$count_balance,"msg"=>"公司账户余额不足"));die;
+           }
+
+    }
+
+    public function inserrecord($id,$num){
+           $goods=model("Shoprecord")->shop_record($id,$num);
+
+           echo $goods;
+
+    }
+
     //兑换记录
     public function record(){
-    	return $this->fetch("record",["title"=>"兑换记录"]);
+
+      $record = model("Shoprecord")->recordlist();
+    	return $this->fetch("record",["title"=>"兑换记录","record"=>$record]);
+
     }
 }

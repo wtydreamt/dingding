@@ -1,7 +1,8 @@
 <?php
 namespace app\dingapp\controller;
 use app\common\controller\Common;
-use app\dingapp\model\User;
+use think\dingapi\DingCache;
+use think\Session;
 use think\view;
 class Fabulous extends Common
 {
@@ -17,8 +18,13 @@ class Fabulous extends Common
 	 */
     public function index()
     {		
+    	    $corpid = session::get("corpid");
+    	    $config = DingCache::IsvConfig($corpid);
+          $list   = model("Events")->GetEvents();
           $view = new View();
           $view->title = "赞赏";
+          $view->config = $config;
+          $view->list   = $list;
           return $view->fetch();  
     }
 

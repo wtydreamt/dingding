@@ -6,6 +6,12 @@ function get_corpid(){
     return session::get("corpid");
 }
 
+function get_userid(){
+
+	$corpid = get_corpid();
+	return $userid = Session::get($corpid."userid");
+
+}
 function ReturnJosn($msg,$code,$data){
 
 		 $res = array("errmsg"=>$msg,"errcode"=>$code,"data"=>$data);
@@ -25,4 +31,14 @@ function randoms($len = 5,$prefix = "CY_"){
 		 }
 
 		 return $time."_".$str;
+}
+
+function estatus($status_code){
+
+		 if($status_code == "2"){
+		 	return "已兑换";
+		 }else if($status_code == "1"){
+		 	return "已完成";
+		 }
+
 }

@@ -31,26 +31,23 @@ float:left;
  line-height: 6rem;
 }
 </style>
-
 {if condition="(!empty($record))"}
-	{volist name="record" id="val"}
-	<div id="container">
-		<div style="height: 2.5rem;width:95%;margin-left: 2.5%;padding-top: 4%">
-			<span style="float:left;margin-left:2% ">{$val.goods_name}</span>
-			<span style="float:right;margin-right:2% ">{$val.status}</span>
-		</div>
-		<div id="leftContent">
-			<img src="https://img.alicdn.com/tps/TB1mKYuJFXXXXbFXpXXXXXXXXXX-375-140.png">
-		</div>
-		<div id="rightContent">
-			  <span style="float:right">福分：<span style="color:red">{$val.integral}</span></span>
-		</div>
-
-	</div>
-	<div style="height: 2rem;width:100%;padding-left: 2.5%; line-height: 2rem;background-color: #fff;">
-		<span>{$val.create_time}</span>
-	</div>
-	{/volist}
+	  {volist name="record" id="val"}
+	  <div id="container">
+	  	<div style="height: 2.5rem;width:95%;margin-left: 2.5%;padding-top: 4%">
+	  		<span style="float:left;margin-left:2% ">{$val.goods_name}</span>
+	  		<span style="float:right;margin-right:2% ">{:estatus($val.status)}</span>
+	  	</div>
+	  	<div id="leftContent">
+	  		<img src="https://img.alicdn.com/tps/TB1mKYuJFXXXXbFXpXXXXXXXXXX-375-140.png">
+	  	</div>
+	  	<div id="rightContent">
+	  		  <span style="float:right">福分：<span style="color:red">{$val.integral}</span></span>
+	  	</div>
+	  </div>
+	  <div style="height: 2rem;width:100%;padding-left: 2.5%; line-height: 2rem;background-color: #fff;">
+	  	<span>{$val.create_time}</span>
+	  </div>
+	  {/volist}
 {else /}
-
 {/if}

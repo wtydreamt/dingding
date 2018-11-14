@@ -59,16 +59,27 @@ class User extends Model
 	   * [GetUser 获取用户信息]
 	   */
 	  public function GetUser(){
+
 	  		$corpid=session::get("corpid");
 	  		$userid=session::get($corpid."userid");
-	        $user  = Db::table('sys_user')
-	        ->alias('u')
-	        ->where("dd_id",$userid)
-	        ->where("u.cust_id",$corpid)
-	        ->join('dingding_office o ','o.dingding_id = u.office_id ')
-	        ->where("o.cust_id",$corpid)
-	        ->field("u.name,u.dd_avatar,o.name as o_name,u.dd_avatar")->find();
-	        return $user;	  	     
+
+	  		$userinfo  =session::get("userinfo");
+	  		if(!$userinfo){
+
+		        $userinfo  = Db::table('sys_user')
+		        ->alias('u')
+		        ->where("dd_id",$userid)
+		        ->where("u.cust_id",$corpid)
+		        ->join('dingding_office o ','o.dingding_id = u.office_id ')
+		        ->where("o.cust_id",$corpid)
+		        ->field("u.name,u.dd_avatar,o.name as o_name,u.dd_avatar,u.code_b,u.balance,u.dd_id")->find();
+		        session::set("userinfo",$user);
+		        return $userinfo;
+	  		}else{
+	  			return $userinfo;
+	  		}
+	
+	          	     
 	  }
 
 	  /**
@@ -85,5 +96,16 @@ class User extends Model
 	  	     $office = Db::table("dingding_office")->where("cust_id",$corpid)->field("name,parent_id,dingding_id")->select();
 	  	     return array("user"=>$usertemp,"office"=>$office);
 
+	  }
+
+	  //用户积分扣减行为
+	  public function IncDec($type,$field,$userid,$num){
+	  		 $corpid=session::get("corpid");
+	  		 if($type == "Inc"){
+	  		 	$res = $this->where("dd_id",$userid)->where("cust_id",$corpid)->setInc($field,$num);
+	  		 }else if($type == "Dec"){
+	  		 	$res = $this->where("dd_id",$userid)->where("cust_id",$corpid)->setDec($field,$num);
+	  		 }
+             return $res;
 	  }
 }

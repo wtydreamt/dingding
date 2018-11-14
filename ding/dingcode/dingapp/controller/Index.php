@@ -21,15 +21,15 @@ class Index extends Common
     public function index($corpid = "")
     {		
 
-    	  if(session::get("corpid") && session::get("corpid") == $corpid){
+    	   if(session::get("corpid") && session::get("corpid") == $corpid){
     	  	 $corpid = session::get("corpid");
-    	  }else{
+    	   }else{
     	  	 session::set("corpid",$corpid);
-    	  }
-    	  
-    	  $config = DingCache::IsvConfig($corpid); 
+    	   }
+    	   
+    	   $config = DingCache::IsvConfig($corpid); 
+    	   return $this->fetch("index",['corpid'=>$corpid,"config"=>$config,"title"=>"悦积分"]);
 
-    	  return $this->fetch("index",['corpid'=>$corpid,"config"=>$config,"title"=>"悦积分"]);
     }
 	
 
@@ -37,11 +37,11 @@ class Index extends Common
 	public function getuser($corpid="" ,$code="" ){
 
 
-			  	     $user=DingCache::get_user($corpid,$code);
-			  	     $user=json_decode($user,true);
-			  	     $userinfo=DingCache::get_user_info($corpid,$user['userid']);
-			  	     $user = new User();
-			  	     echo $res=$user->UserRegister($userinfo);		
+			$user=DingCache::get_user($corpid,$code);
+			$user=json_decode($user,true);
+			$userinfo=DingCache::get_user_info($corpid,$user['userid']);
+			$user = new User();
+			echo  $res=$user->UserRegister($userinfo);		
 
 	}
 

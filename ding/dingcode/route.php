@@ -19,11 +19,17 @@ Route::rule("myindex","dingapp/Myindex/index");     //我的个人中心
 Route::rule("framework","dingapp/Myindex/framework");     //组织架构
 
 //赞赏
-Route::rule("fabulous","dingapp/Fabulous/index");     //组织架构
+Route::rule("fabulous","dingapp/Fabulous/index");     
+Route::rule("insertaaa","dingapp/Fabulous/insertaaa");
 
 //工作台
 Route::rule("workbench","dingapp/Workbench/index"); //工作台
 
+
+//奖扣
+Route::rule("buckle","dingapp/buckle/index"); //奖扣申请
+Route::rule("get_events","dingapp/buckle/get_events"); //获取事件
+Route::rule("events_info","dingapp/buckle/get_events_info");
 
 //兑换模块
 Route::rule("exchange","dingapp/Exchange/index");   //兑换中心

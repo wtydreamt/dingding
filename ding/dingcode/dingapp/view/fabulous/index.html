@@ -1,22 +1,46 @@
 {include file="public/header" /}
-<div>
-	<div class="t-collapse" role="tablist" >
-		<div class="t-collapse-item" style="background:transparent;" id="Choice">
-			<div class="t-collapse-header" background:transparent; aria-expanded="false" role="tab" tabindex="0">
-				<span >请选择要赞赏的人</span>
-                <span style="padding-left:10%" id="user" userid=""></span>
-				 <i style="float:right;">></i>
-			</div>
-		</div>		
-		<div class="t-collapse-item" style="background:transparent;">
-			<div class="t-collapse-header" background:transparent; aria-expanded="false" role="tab" tabindex="0">
-				<span >请选择要赞赏的人</span>
-				<input style="float:right;height: 2rem;border:none; background:transparent;margin:0; " type="card" placeholder="可赠送99赞币" class="t-button t-button-minor t-button-normal t-button-size-medium">
-			</div>			
-		</div>
-	</div>
-</div>
-<div style="border-top:1px solid #C0C0C0;">
+<form action="/insertaaa" method="post">
+
+    <div class="t-group-list-item apply-user">
+        <div class="t-field">
+            <div class="t-field-box t-field-content-box t-FBH t-FBAC">
+                <div class="t-field-label t-field-layout-h-label">
+                    <div class="t-field-layout-h-label-left"  id="Choice"><span>受赞赏人</span></div>
+                </div>
+                <div class="t-FB1 t-PR">
+                    <div><input class="t-text-field-input" type='text' name="apply_user" placeholder="" required readonly></div>
+                    <input class="t-text-field-input" type='hidden' name="apply_user_id" placeholder="被赞人" required readonly>
+                </div>
+                <div class="t-FBH t-FBAC t-field-icon">
+                    <div style="line-height:0;display: none" class="t-icon t-svg t-field-error-icon apply_user0"><div style="position:relative;"><svg name="" width="32px" height="32px" fill="#000" viewBox="0 0 1024 1024"><path d="M512 960C264.576 960 64 759.424 64 512S264.576 64 512 64s448 200.576 448 448-200.576 448-448 448zm-32-287.68v63.36a32 32 0 1 0 64 0v-63.36a32 32 0 1 0-64 0zm0-384.48v256.32c0 17.28 14.336 31.84 32 31.84 17.792 0 32-14.272 32-31.84V287.84c0-17.28-14.336-31.84-32-31.84-17.792 0-32 14.272-32 31.84z"></path></svg><div class="t-icon-mask"></div></div></div>
+
+                    <div style="display:inline-block;line-height:0;" class="t-icon t-svg"><div style="position:relative;"><svg name="angle-right" fill="rgba(31,56,88,0.40)" width="20" height="20" viewBox="0 0 24 24"><path d="M10 6L8.6 7.4l4.6 4.6-4.6 4.6L10 18l6-6z"></path></svg><div class="t-icon-mask"></div></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="t-group-list">
+        <div class="t-group-list-item">
+            <div class="t-field">
+                <div class="t-field-box t-field-content-box t-FBH t-FBAC">
+                    <div class="t-field-label t-field-layout-h-label">
+                        <div class="t-field-layout-h-label-left"><span>赞赏数量</span></div>
+                    </div>
+                    <div class="t-FB1 t-PR"></div>
+                    <div class="t-FBH t-FBAC t-field-icon">
+                        <div class="t-text-field-content">
+                            <div class="t-text-field-content-main">
+                                <input class="t-text-field-input" type="number" name="code" value="" placeholder="可赞赏 {$balance} 福分">
+                            </div>
+                            <div style="line-height:0;display: none" class="t-icon t-svg t-field-error-icon code-err0"><div style="position:relative;"><svg name="" width="32px" height="32px" fill="#000" viewBox="0 0 1024 1024"><path d="M512 960C264.576 960 64 759.424 64 512S264.576 64 512 64s448 200.576 448 448-200.576 448-448 448zm-32-287.68v63.36a32 32 0 1 0 64 0v-63.36a32 32 0 1 0-64 0zm0-384.48v256.32c0 17.28 14.336 31.84 32 31.84 17.792 0 32-14.272 32-31.84V287.84c0-17.28-14.336-31.84-32-31.84-17.792 0-32 14.272-32 31.84z"></path></svg><div class="t-icon-mask"></div></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="t-group-list t-BT1">
         <div class="t-group-list-item">
             <div class="t-field">
@@ -30,11 +54,10 @@
                         <div class="t-textarea-field-content"  style="line-height:1.3;padding-top: 12px" placeholder="" rows="5">
                         {if condition="(!empty($list))"}
                             {volist name="list" id="val"}
-                                <input class="label t-button t-button-secondary t-button-size-medium" style="margin-bottom: 1rem;" type="button" value="{$val.name}">
+                                <input  class="label t-button t-button-secondary t-button-size-medium" style="margin-bottom: 1rem;" type="button" value="{$val.name}">
                             {/volist}
                         {else /}
-
-                        {/if}                           
+                        {/if}
                         </div>
                         <input type="hidden" name="label" id="label_hidden" value=""></div>
                         <div style="display:inline-block;line-height:0;display: none" class="t-icon t-svg t-field-error-icon label-err0"><div style="position:relative;"><svg name="" width="32px" height="32px" fill="#000" viewBox="0 0 1024 1024"><path d="M512 960C264.576 960 64 759.424 64 512S264.576 64 512 64s448 200.576 448 448-200.576 448-448 448zm-32-287.68v63.36a32 32 0 1 0 64 0v-63.36a32 32 0 1 0-64 0zm0-384.48v256.32c0 17.28 14.336 31.84 32 31.84 17.792 0 32-14.272 32-31.84V287.84c0-17.28-14.336-31.84-32-31.84-17.792 0-32 14.272-32 31.84z"></path></svg><div style="position:absolute;top:0;left:0;width:100%;height:100%;" class="t-icon-mask"></div></div></div>
@@ -44,8 +67,6 @@
             </div>
         </div>
     </div>
-</div>
-
     <div class="t-group-list t-BT1">
         <div class="t-group-list-item">
             <div class="t-field">
@@ -68,12 +89,13 @@
             </div>
         </div>
     </div>
-
     <div style="padding-top: 20px" id="submit">
         <div class="t-button t-button-primary t-button-normal t-button-size-medium"><span>赞赏</span></div>
     </div>
+</form>
 <script type="text/javascript">
     var  _config ={$config};
+    var  user_id ={$user_id};
 </script>
 <script type="text/javascript" src="/static/dingding/config.js"></script>
 <script type="text/javascript" src="/static/logger.js"></script>

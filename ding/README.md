@@ -133,15 +133,6 @@ ThinkPHP® 商标和著作权所有者为上海顶想信息科技有限公司。
 更多细节参阅 [LICENSE.txt](LICENSE.txt)
 
 
-SELECT
-	openid,
-	mobile,
-	realname,
-	nickname,
-	credit2
-FROM
-	ims_shop_member
-WHERE
-	uniacid = 3
+
 
 //福田没有消耗的余额

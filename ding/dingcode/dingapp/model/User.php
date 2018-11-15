@@ -62,24 +62,14 @@ class User extends Model
 
 	  		$corpid=session::get("corpid");
 	  		$userid=session::get($corpid."userid");
-
-	  		$userinfo  =session::get("userinfo");
-	  		if(!$userinfo){
-
-		        $userinfo  = Db::table('sys_user')
-		        ->alias('u')
-		        ->where("dd_id",$userid)
-		        ->where("u.cust_id",$corpid)
-		        ->join('dingding_office o ','o.dingding_id = u.office_id ')
-		        ->where("o.cust_id",$corpid)
-		        ->field("u.name,u.dd_avatar,o.name as o_name,u.dd_avatar,u.code_b,u.balance,u.dd_id")->find();
-		        session::set("userinfo",$user);
-		        return $userinfo;
-	  		}else{
-	  			return $userinfo;
-	  		}
-	
-	          	     
+		    $userinfo  = Db::table('sys_user')
+		    ->alias('u')
+		    ->where("dd_id",$userid)
+		    ->where("u.cust_id",$corpid)
+		    ->join('dingding_office o ','o.dingding_id = u.office_id ')
+		    ->where("o.cust_id",$corpid)
+		    ->field("u.name,u.dd_avatar,o.name as o_name,u.dd_avatar,u.code_b,u.balance,u.dd_id")->find();
+	        return $userinfo;
 	  }
 
 	  /**

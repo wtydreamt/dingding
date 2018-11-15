@@ -12,6 +12,7 @@
 use think\Route;
 
 Route::get("","dingapp/index/index");
+Route::get("home","dingapp/index/home");
 Route::rule("getuser","dingapp/index/getuser");     //授权获取用户信息
 
 //我的模块
@@ -27,9 +28,13 @@ Route::rule("workbench","dingapp/Workbench/index"); //工作台
 
 
 //奖扣
-Route::rule("buckle","dingapp/buckle/index"); //奖扣申请
-Route::rule("get_events","dingapp/buckle/get_events"); //获取事件
-Route::rule("events_info","dingapp/buckle/get_events_info");
+Route::rule("buckle","dingapp/buckle/index");                //奖扣申请
+Route::rule("get_events","dingapp/buckle/get_events");       //获取事件
+Route::rule("events_info","dingapp/buckle/get_events_info"); //获取事件详情
+Route::rule("BuckleInsert","dingapp/buckle/BuckleInsert");   //事件数据插入 
+//消息通知
+Route::rule("Sendmsg","dingapp/buckle/Sendmsg");
+
 
 //兑换模块
 Route::rule("exchange","dingapp/Exchange/index");   //兑换中心

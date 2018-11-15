@@ -40,7 +40,6 @@ class Fabulous extends Common
 
     //记录点赞事件
     public function insertaaa($label,$desc,$code,$apply_user_id){
-           
            $datetime = date("Y-m-d H:i:s");
            $app_arr = [];
            $appevent_arr = [];

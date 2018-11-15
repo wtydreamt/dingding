@@ -6,7 +6,7 @@ class Fabulous extends Model
 {	  
 	  protected $table = 'approval';
 
-	  public function approval($approval_S,$event_arr,$apply_user_id,$code){
+	  public function approval($approval_S,$event_arr,$apply_user_id,$code){  	
 	  	     //创建点赞事件申请
 	  		 $approval=model("Fabulous");
              $approval->startTrans();
@@ -14,7 +14,7 @@ class Fabulous extends Model
 	  		 $res = $approval->allowField(true)->save($approval_S);
 	  		 if(!$res){
 	  		 	$approval->rollback();
-	  		 	return ReturnJosn("NO","-1","事件创建失败");die;
+	  		 	return ReturnJosn("NO","-1","事件提交失败");die;
 	  		 }
 	  		 //创建点赞事件记录
 	  		 $Approvale = model("Approvale");
@@ -24,7 +24,7 @@ class Fabulous extends Model
 	  		 if(!$res_event){
 	  		 	$approval->rollback();
 	  		 	$Approvale->rollback();
-	  		 	return ReturnJosn("NO","-1","事件记录失败");die;
+	  		 	return ReturnJosn("NO","-1","事件提交失败");die;
 	  		 }
 	  		 //事件记录派生表数据插入
 	  		 $Approvald = model("Approvald");
@@ -35,6 +35,7 @@ class Fabulous extends Model
 	  		 $Approvald_arr['code_a']  = $code;
 	  		 $Approvald_arr['user_id'] = $apply_user_id;
 	  		 $Approvald_arr['cust_id'] = $approval_S['corp_id'];
+	  		 $Approvald_arr['status']  = 2;
 	  		 $res_d = $Approvald->allowField(true)->save($Approvald_arr);
 
 	  		 $balance = model("user")->where("dd_id",$approval_S['create_user_id'])->where("cust_id",$approval_S['corp_id'])->field("balance")->find();
@@ -43,7 +44,7 @@ class Fabulous extends Model
 	  		 	$approval->rollback();
 	  		 	$Approvale->rollback();
 	  		 	$Approvald->rollback();
-	  		 	return ReturnJosn("NO","-1","事件记录失败");die;	  		 	
+	  		 	return ReturnJosn("NO","-1","事件提交失败");die;	  		 	
 	  		 }
 	  		 $user = model("User");
 	  		 $user->startTrans();
@@ -63,9 +64,21 @@ class Fabulous extends Model
 	  		 	$Approvale->commit();
 	  		 	$Approvald->commit();
 	  		 	$user->commit();
+	  		 	//记录月份分数扣减情况
+	  		    model("Approvalcount")->CheckCount($approval_S['create_user_id'],$approval['corp_id'],['buckle_a'=>"-".$code]);
+	  		    model("Approvalcount")->CheckCount($apply_user_id,$approval['corp_id'],['code_a'=>$code]);		  		 	
 	  		 	return ReturnJosn("ok","200","数据写入正常"); 		 	
 	  		 }	  		 
 	  }
 	  
 
+	  //获取奖扣列表
+	  
+	  // public function GetBuckle(){
+
+	  // 		 $this->alias('a')
+	  // 		 ->join("user u" , " a.corp_id = u.cust_id")
+	  // 		 ->join("")
+
+	  // }
 }

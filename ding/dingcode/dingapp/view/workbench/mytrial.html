@@ -1,0 +1,449 @@
+<link rel="stylesheet" href="/static/css/mytrial.css">
+
+<div class="card-wrap">
+    <div class="t-card card-sence">
+        <div class="t-card-header">
+            <div class="t-avatar" style="width:40px;height:40px;line-height:40px;font-size:14px;position:relative;background-color:#5EC9F6;"></div>
+            <div class="card-header-text"><span class="card-username"><?= $approval->create_user_name ?></span><span class="card-date"></span></div>
+        </div>
+        <div class="t-card-body">
+            <div class="card-title"></div>
+            <p class="card-desc"></p>
+        </div>
+        <div class="t-card-footer">
+            <div class="card-footer-meta">
+                <span class="card-footer-meta-item">
+                    <span class="card-eye-count"></span>
+                </span>
+                <span class="card-footer-meta-item">
+                    <span class="card-like-count"></span>
+                </span>
+            </div>
+            <div class="card-footer-extra" ><?= $approval->status_name ?></div>
+        </div>
+    </div>
+</div>
+
+<div class="t-group-head t-demo-title" style="height: 0.5rem"></div>
+<div class="t-group-head t-demo-title">奖扣对象</div>
+
+<?php foreach (json_decode($approval->apply_user_id_with_code, true) as $v) { ?>
+<div class="t-group-list t-BT1">
+    <div class="t-group-list-item">
+        <div class="t-field">
+            <div class="t-field-box t-field-content-box t-FBH t-FBAC">
+                <div class="t-field-label t-field-layout-h-label">
+                    <div class="t-field-layout-h-label-left"><span><?= get_user_name_by_id($corp_id, $v['user_id']) ?></span></div>
+                </div>
+                <div class="t-FB1 t-PR">
+                    <div><?= isset($v['code_a']) ? ('C分：' . $v['code_a']) : '' ?></div>
+                    <div><?= isset($v['code_b']) ? ('D分：' . $v['code_b']) : '' ?></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php } ?>
+
+<div class="t-group-head t-demo-title" style="height: 0.5rem"></div>
+
+<div class="t-group-list t-BT1">
+    <div class="t-group-list-item">
+        <div class="t-field">
+            <div class="t-field-box t-field-content-box t-FBH t-FBAC">
+                <div class="t-field-label t-field-layout-h-label">
+                    <div class="t-field-layout-h-label-left"><span>初审</span></div>
+                </div>
+                <div class="t-FB1 t-PR">
+                    <div><?= $approval->first_user_name ?></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php if($approval->first_remark) { ?>
+    <div class="t-group-list t-BT1">
+        <div class="t-group-list-item">
+            <div class="t-field">
+                <div class="t-field-box t-field-content-box t-FBH">
+                    <div class="t-field-label t-field-layout-h-label">
+                        <div class="t-field-layout-h-label-left">
+                            <span>审批意见</span>
+                        </div>
+                    </div>
+                    <div class="t-FB1 t-PR t-field-multi">
+                        <div>
+                            <textarea class="t-textarea-field-content" style="line-height:1.3;padding-top: 12px" placeholder="审批意见" rows="5" <?= ! empty($approval->first_remark) ? 'readonly' : '' ?>><?= $approval->first_remark ?></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+
+<div class="t-group-list t-BT1">
+    <div class="t-group-list-item">
+        <div class="t-field">
+            <div class="t-field-box t-field-content-box t-FBH t-FBAC">
+                <div class="t-field-label t-field-layout-h-label">
+                    <div class="t-field-layout-h-label-left"><span>终审</span></div>
+                </div>
+                <div class="t-FB1 t-PR">
+                    <div><?= $approval->end_user_name ?></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php if($approval->end_remark) { ?>
+    <div class="t-group-list t-BT1">
+        <div class="t-group-list-item">
+            <div class="t-field">
+                <div class="t-field-box t-field-content-box t-FBH">
+                    <div class="t-field-label t-field-layout-h-label">
+                        <div class="t-field-layout-h-label-left">
+                            <span>审批意见</span>
+                        </div>
+                    </div>
+                    <div class="t-FB1 t-PR t-field-multi">
+                        <div>
+                            <textarea class="t-textarea-field-content" style="line-height:1.3;padding-top: 12px" placeholder="审批意见" rows="5"><?= $approval->end_remark ?></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+
+<?php if(($approval->first_user_id == $user_id and $approval->status == 0) or ($approval->end_user_id == $user_id and $approval->status == 1)) { ?>
+    <?php if($approval->is_report == 2 || $approval->is_process == 1) { ?><!--如果为周报及钉钉审批及可更改分数-->
+    <div class="t-group-list t-BT1">
+        <div class="t-group-list-item">
+            <div class="t-field">
+                <div class="t-field-box t-field-content-box t-FBH">
+                    <div class="t-field-label t-field-layout-h-label">
+                        <div class="t-field-layout-h-label-left">
+                            <span>审批D分</span>
+                        </div>
+                    </div>
+                    <div class="t-FB1 t-PR t-field-multi">
+                        <div>
+                            <input class="rc-input-number-input" value="" id="report_2_apply_code">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php } ?>
+
+    <div class="t-group-list t-BT1">
+        <div class="t-group-list-item">
+            <div class="t-field">
+                <div class="t-field-box t-field-content-box t-FBH">
+                    <div class="t-field-label t-field-layout-h-label">
+                        <div class="t-field-layout-h-label-left">
+                            <span>审批意见</span>
+                        </div>
+                    </div>
+                    <div class="t-FB1 t-PR t-field-multi">
+                        <div>
+                            <textarea class="t-textarea-field-content" id="remark" name="remark" style="line-height:1.3;padding-top: 12px" placeholder="审批意见" rows="5"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php if($approval->end_user_id == $user_id && $approval->status == 1) { ?>
+    <div class="t-group-head t-demo-title" style="height: 0.5rem"></div>
+    <div class="card-wrap" style="margin-top: 1rem;">
+        <div class="t-card card-sence">
+            <div><span style="font-size: 16px;">发送至群聊</span></div>
+            <div class="t-card-body">
+                <input type="hidden" id="cid">
+                <div class="group_list">
+
+                </div>
+                <div class="demo" id="send_group" style="margin-top: 1rem;"><div style="display:inline-block;line-height:0;" class="t-icon t-svg" ><div style="position:relative;" ><svg fill="dodgerblue" name="" width="32px" height="32px" viewBox="0 0 1024 1024" ><path d="M480 480V288a32 32 0 0 1 64 0v192h192a32 32 0 0 1 0 64H544v192a32 32 0 0 1-64 0V544H288a32.64 32.64 0 0 1-32-32 32 32 0 0 1 32-32h192zm32-416a448 448 0 0 1 448 448c0 247.424-200.576 448-448 448S64 759.424 64 512 264.576 64 512 64zm0 832a384 384 0 0 0 384-384c0-212.064-171.936-384-384-384S128 299.936 128 512s171.936 384 384 384z" ></path></svg><div style="position:absolute;top:0;left:0;width:100%;height:100%;" class="t-icon-mask" ></div></div></div><div class="menu-title" style="margin-top: 0.3rem;">添加</div></div>
+            </div>
+        </div>
+    </div>
+    <?php }?>
+    <div style="padding: 20px 5px">
+        <div class="section-content" style="max-width: 414px">
+            <div class="t-button-group">
+                <div class="t-button t-button-secondary t-button-inline t-button-size-medium" id="reject"><span>驳回</span></div>
+                <div class="t-button t-button-primary t-button-inline t-button-size-medium" id="pass"><span>同意</span></div>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+
+<script>
+    $(function () {
+        var _config = <?= $config ?>;
+        dd.config({
+            agentId  : _config.agentId,
+            corpId   : _config.corpId,
+            timeStamp: _config.timeStamp,
+            nonceStr : _config.nonceStr,
+            signature: _config.signature,
+            jsApiList: [
+                'runtime.info',
+                'device.notification.prompt',
+                'biz.chat.pickConversation',
+                'device.notification.confirm',
+                'device.notification.alert',
+                'device.notification.prompt',
+                'biz.chat.open',
+                'biz.util.open',
+                'biz.user.get',
+                'biz.contact.choose',
+                'biz.telephone.call',
+                'biz.util.uploadImage',
+                'biz.ding.post',
+                'biz.contact.complexPicker',
+                'biz.chat.chooseConversationByCorpId',
+            ]
+        })
+        $("#report_2_apply_code").blur(function()
+        {
+            var report_2_apply_code = $(this).val();
+            reg=/^\d+$/;
+            if(reg.test(report_2_apply_code)==false && report_2_apply_code.length != 0)
+            {
+                dtoast('error',"不能填汉字哦!");
+            }
+        })
+        $(document).on("click",".group_label",function()
+        {
+            var this_cid = $(this).attr("cid");
+            now_cid = $("#cid").val();
+            var strs= new Array();
+            strs = now_cid.split(",");
+            for (i=0;i<strs.length ;i++ )
+            {
+                if(this_cid == strs[i])
+                {
+                    strs.splice(i,1);
+                }
+            }
+            $(this).remove();
+            $("#cid").val(strs);
+        })
+        $("#send_group").click(function()
+        {
+            dd.ready(function () {
+                dd.biz.chat.pickConversation({
+                    corpId: '<?=$corp_id?>', //企业id
+                    isConfirm:'false',
+                    onSuccess : function(res) {
+                        // alert(JSON.stringify(res));
+                        $(".group_list").append("<input class='group_label' type='button' value="+res.title+" cid="+res.cid+">");
+                        now_cid = $("#cid").val();
+                        if(now_cid.length != 0)
+                        {
+                            cid = res.cid+","+now_cid;
+                        }else
+                        {
+                            cid = res.cid;
+                        }
+                        $("#cid").val(cid);
+                    },
+                    onFail : function(err) {
+                    alert(JSON.stringify(err));
+                }
+                })
+            })
+        })
+
+        $('#pass').click(function () {
+            dd.ready(function () {
+                dd.device.notification.confirm({
+                    message     : '确定同意吗？',
+                    title       : '提示',
+                    buttonLabels: ['取消', '确认'],
+                    onSuccess   : function (result) {
+                        if (result.buttonIndex == 1) {
+                            var report_2_apply_code = $("#report_2_apply_code").val();
+                            reg=/^\d+$/;
+                            /*为true:当需要填写时填写正确则ok
+                            * 为空或者并且是false :当可以填写但是不填为空时
+                            * 为undefined：当不为审批和周报时则为undefined也ok
+                            * */
+                            if (reg.test(report_2_apply_code)==true || (report_2_apply_code == "" && reg.test(report_2_apply_code)==false) || report_2_apply_code == undefined)
+                            {
+                        <?php if($approval->is_report == 2 || $approval->is_process == 1) { ?>
+                            var data = {remark: $('#remark').val(), report_2_apply_code: $('#report_2_apply_code').val()}
+                        <?php } else { ?>
+                            var data = {remark: $('#remark').val()}
+                        <?php } ?>
+
+                            /*初审发送工作通知*/
+                            var firstsend_data = {
+                                'type':'2',
+                                'user_object' : '<?=$approval->end_user_id?>',/*初审完毕给终审人发送通知*/
+                                'title' : '<?=$approval->event_name?>',
+                                'type_name' :"待终审",
+                                'firest_name' : '<?=$approval->first_user_name?>',
+                                'end_name' : '<?=$approval->end_user_name?>',
+                                'link' : "code_approval/my",
+                                'apply_user_id_with_code' : '<?=$approval->apply_user_id_with_code?>'
+                            };
+                            var sendWorkNoticeFirst = {
+                                url     : '<?= DD_HOST ?>code_approval/sendWorkNotice?<?= NAV_COLOR ?>',
+                                type    : 'POST',
+                                data    : firstsend_data,
+                                dataType: 'json',
+                                async:false,
+                                success : function (response) {
+                                    // alert("success");
+                                    // alert(JSON.stringify(response))
+                                    if(response.code == 2)
+                                    {
+                                        dtoast('success',response.msg);
+                                    }
+                                },
+                                error   : function (err) {
+                                    // alert("error");
+                                    // alert(JSON.stringify(err))
+                                }
+                            }
+                            /*初审发送发送工作通知end*/
+                            /*终审发送工作通知  终审完毕给奖扣人发送通知*/
+                            var endsend_data = {
+                                'type':'3',
+                                'title' : '<?=$approval->event_name?>',
+                                'type_name' :"已完成",
+                                'firest_name' : '<?=$approval->first_user_name?>',
+                                'end_name' : '<?=$approval->end_user_name?>',
+                                'link' : "code_approval/my",
+                                'report_2_apply_code' : $('#report_2_apply_code').val(),
+                                'apply_user_id_with_code' : '<?=$approval->apply_user_id_with_code?>'
+                            };
+                            var sendWorkNoticeEnd = {
+                                url     : '<?= DD_HOST ?>code_approval/sendWorkNotice?<?= NAV_COLOR ?>',
+                                type    : 'POST',
+                                data    : endsend_data,
+                                dataType: 'json',
+                                success : function (response) {
+                                    // alert("success");
+                                    // alert(JSON.stringify(response))
+                                    if(response.code == 3)
+                                    {
+                                        dtoast('success',response.msg)
+                                    }
+                                },
+                                error   : function (err) {
+                                    // alert("error");
+                                    // alert(JSON.stringify(err))
+                                }
+                            }
+                            /*终审发送发送工作通知end*/
+                            var send_url  = '<?= DD_HOST ?>code_approval/send_group?<?= NAV_COLOR ?>'
+                            var cids = $("#cid").val();
+                            var getRequest = {
+                                url     : '<?= DD_HOST ?>code_approval/pass/<?= $id ?>',
+                                type    : 'POST',
+                                data    : data,
+                                dataType: 'json',
+                                success : function (response) {
+                                    if (response.errcode == 0) {
+                                        <?php if($approval->end_user_id == $user_id && $approval->status == 1){?>
+                                        /*终审后发送给奖扣人工作通知*/
+                                        $.ajax(sendWorkNoticeEnd)
+                                        <?php }else {?>
+                                        /*初审后发送给终审人工作通知*/
+                                        $.ajax(sendWorkNoticeFirst)
+                                        <?php }?>
+                                        // dtoast('success', '审核通过')
+                                        openLink('<?= DD_HOST ?>code_approval/my?<?= NAV_COLOR ?>')
+                                    } else {
+                                        dtoast('error', response.message)
+//                                        alert(JSON.stringify(response))
+                                    }
+                                },
+                                error   : function (err) {
+                                    alert(JSON.stringify(err))
+                                }
+                            }
+                            <?php if($approval->end_user_id == $user_id && $approval->status == 1){?>/*终审*/
+                            /*终审时 发送群消息*/
+                            var sendGroupRequest = {
+                                url     : send_url+"&cid="+cids,
+                                data    : {'end_user_name':'<?=$approval->end_user_name?>','first_user_name':'<?=$approval->first_user_name?>','create_user_name':'<?=$approval->create_user_name?>','event_name':'<?=$approval->event_name?>','end_user_id':'<?=$approval->end_user_id?>','apply_user_id_with_code':'<?=$approval->apply_user_id_with_code?>','report_2_apply_code': $('#report_2_apply_code').val()},
+                                type    : 'GET',
+                                dataType: 'json',
+                                success : function (response) {
+                                    // alert(JSON.stringify(response));
+                                    if(response.code == 1 || response.code == 2)
+                                    {
+                                        $.ajax(getRequest)
+                                    }
+                                },error   : function (errr) {
+                                    // alert(JSON.stringify(errr));
+                                    dtoast('error','不能反复提交');
+                                }
+                            }
+                            $.ajax(sendGroupRequest)
+                            <?php }else{?>
+			    /*初审时*/
+                            $.ajax(getRequest)
+                            <?php }?>
+                            }
+                            else
+                            {
+                                dtoast('error',"审批D分不能填汉字哦!");
+                            }
+                        }
+                    },
+                    onFail      : function (err) {}
+                })
+            })
+        })
+
+        $('#reject').click(function () {
+            dd.ready(function () {
+                dd.device.notification.confirm({
+                    message     : '确定驳回吗？',
+                    title       : '提示',
+                    buttonLabels: ['取消', '确认'],
+                    onSuccess   : function (result) {
+                        if (result.buttonIndex == 1) {
+                            //
+                            if ($('#remark').val() == '') {
+                                dtoast('error', '请填写驳回时的备注')
+                            } else {
+                                var getRequest = {
+                                    url     : '<?= DD_HOST ?>code_approval/reject/<?= $id ?>',
+                                    type    : 'POST',
+                                    data    : {remark: $('#remark').val()},
+                                    dataType: 'json',
+                                    success : function (response) {
+                                        if (response.errcode == 0) {
+                                            dtoast('success', '审核驳回')
+                                            openLink('<?= DD_HOST ?>code_approval/my?<?= NAV_COLOR ?>')
+                                        } else {
+                                            alert(JSON.stringify(response))
+                                        }
+                                    },
+                                    error   : function (err) {
+                                        alert(JSON.stringify(err))
+                                    }
+                                }
+                                $.ajax(getRequest)
+                            }
+                        }
+                    },
+                    onFail      : function (err) {}
+                })
+            })
+        })
+
+    })
+</script>

@@ -20,6 +20,11 @@ class Workbench extends Common
     	return $this->fetch("index",["title"=>"工作台"]);
     }
 	
+	//我的审核
+    public function MyTrial(){
+    	return $this->fetch("mytrial",["title"=>"我的审核"]);
+    }
 
 
+    
 }

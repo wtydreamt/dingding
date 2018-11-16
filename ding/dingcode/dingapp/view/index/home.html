@@ -1,106 +1,5 @@
-<style type="text/css">
-    body {
-        background-color: #f2f2f2;
-    }
 
-    .t-card-header {
-        display: flex;
-        padding: 12px 16px 0;
-    }
-
-    .t-card-body {
-        padding: 16px 16px 0px;
-    }
-
-    .t-card-footer {
-        display: flex;
-        justify-content: space-between;
-        padding: 0px 12px 16px;
-        font-size: 12px;
-    }
-
-    .card-header-text {
-        margin-left: 12px;
-    }
-
-
-    .card-username {
-        display: block;
-        font-size: 14px;
-        color: rgba(0,0,0,0.6);
-        line-height: 22px;
-    }
-
-    .card-date {
-        font-size: 12px;
-        color: rgba(31,56,88,0.4);
-        line-height: 18px;
-    }
-
-    .card-title {
-        font-size: 16px;
-        color: rgba(0,0,0,0.8);
-        line-height: 24px;
-        margin-left: 3rem;
-    }
-
-
-    .card-footer-meta {
-        display: flex;
-        color: rgba(31,56,88,0.6);
-        line-height: 18px;
-    }
-
-    .card-icon svg {
-        fill: rgba(31,56,88,0.6);
-        width: 16px;
-        height: 18px;
-    }
-
-    .card-footer-extra {
-        color: rgba(31,56,88,0.4);
-        line-height: 18px;
-    }
-    .card-footer-hand{
-        padding-right: 0.4rem;
-    }
-    .t-tab-bar{
-        display: flex;
-        position: relative;
-        z-index: 5;
-    }
-
-    .already_like{
-        color: dodgerblue;
-        font-size: 16px;
-    }
-
-    .label{
-        border-radius: 5px;
-        background-color: #FFF;
-        margin-top: 1rem;
-    }
-    #label
-    {
-        display: inline-block;
-        line-height: 0;
-        position: relative;
-        vertical-align: middle;
-        float: right;
-        margin-top: 12px;
-        transition-duration: .3s;
-        font-size: 22px;
-    }
-    .follow_time{
-        float: right;
-        margin-right: 1rem;
-    }
-    .font_blue
-    {
-        color:dodgerblue;
-    }
-
-</style>
+<link rel="stylesheet" type="text/css" href="/static/css/home.css"/>
 
 <div role="tablist" class="t-tab-bar" tabindex="0">
     <div style="width: 50px; display: block;transform: translate3d(5rem, 0px, 0px);" id="slip_block" class="t-tab-ink-bar t-tab-ink-bar-animated" ></div>
@@ -114,33 +13,40 @@
 </div>
 
 <div id="buckle" style="display: none;">
-
+{if condition="(!empty($event['event']))"}
+    {volist name="event['event']" id="eval"}
     <div class="card-wrap">
     <div class="t-card card-sence" style="margin-top: 15px">
         <div class="t-card-header">
-            <div class="t-avatar" style="width:40px;height:40px;line-height:40px;font-size:14px;position:relative;background-color:#5EC9F6;">廷昱</div>
+            <div class="t-avatar" style="width:40px;height:40px;line-height:40px;font-size:14px;position:relative;background-color:#5EC9F6;">{:getName($event['user'],$eval['create_user_id'])}</div>
             <div class="card-header-text">
-                <span class="card-username">奖扣人：廷昱</span>
-                <span class="card-date">时间范围</span>
+                <span class="card-username">{:getName($event['user'],$eval['create_user_id'])}</span>
+                <span class="card-date">{$eval.a_date}</span>
             </div>
         </div>
 
         <div class="t-card-body">
             <div class="card-title">
-                <span>事件名称</span>
+                <span>{$eval.event_name}</span>
                 <span style="float: right;padding-right: 0.1rem;">
-                        <span>+5</span>
+                        {if condition="($eval['code_b'])"}
+                        <span>D：{:cyabs($eval['code_b'])}</span>
+                        {/if}
+                        &nbsp
+                        {if condition="($eval['code_c'])"}
+                        <span>C：{:cyabs($eval['code_c'])}</span>
+                        {/if}
                 </span>
             </div>
         </div>
 
         <div class="t-card-footer">
-            <div class="card-title-extra">奖扣对象:王廷昱，王王王</div>
-            <div class="card-footer-extra">2人已提交</div>
+            <div class="card-title"></div>
+            <div class="card-footer-extra">{$eval.num}人已提交</div>
         </div>
         </div>
     </div>
-
+    {/volist}
     <input type="hidden" id="buckle_page_cur" value="">
     <div id="buckle_box"></div>
     <div id="buckle_loading_ok">
@@ -155,23 +61,26 @@
                     </svg><div style="position:absolute;top:0;left:0;width:100%;height:100%;" class="t-icon-mask" >
                     </div></div></div><div class="loading-text">已经全部加载喽！</div></div>
     </div>
+{else /}
 
+{/if}
 </div>
 
 
 <div id="likes" style="display: block;">
-
+{if condition="(!empty($Fabulous))"}
+    {volist name="Fabulous" id="val"}
     <div class="card-wrap">
         <div class="t-card card-sence" style="margin-top: 15px">
             <div class="t-card-header">
-                <div class="t-avatar" style="width:40px;height:40px;line-height:40px;font-size:14px;position:relative;background-color:#5EC9F6;">廷昱</div>
+                <div class="t-avatar" style="width:40px;height:40px;line-height:40px;font-size:14px;position:relative;background-color:#5EC9F6;">{:getName($user_list,$val['s_user'])}</div>
                 <div class="card-header-text">
-                    <span class="card-username">廷昱</span>
-                    <span class="card-date">23小时前</span>
+                    <span class="card-username">{:getName($user_list,$val['s_user'])}</span>
+                    <span class="card-date">{$val['a_date']}</span>
                 </div>
             </div>
             <div class="t-card-body">
-                <div class="card-title">来自<span style="color:dodgerblue; ">王亭钰</span>的赞赏<br/><span></span><br/><input class="label t-button t-button-secondary t-button-size-medium" type="button" value="标签工作狂人"></div>
+                <div class="card-title">来自<span style="color:dodgerblue; ">{:getName($user_list,$val['create_user'])}</span>的赞赏<br/><span></span><br/><input class="label t-button t-button-secondary t-button-size-medium" type="button" value="{$val['label']}"></div>
             </div>
             <div class="t-card-footer">
                 <div class="card-footer-meta">
@@ -202,7 +111,7 @@
             <!--跟赞 end-->
         </div>
     </div>
-
+    {/volist}
     <input type="hidden" id="likes_page_cur" value="">
     <div id="like_box"></div>
     <div id="loading_ok">
@@ -218,14 +127,14 @@
                     </div></div></div><div class="loading-text">已经全部加载喽！</div></div>
     </div>
 
+{else /}
+
+{/if}
 </div>
 
 
 <script>
 $(function () {
-
-
-
 
 $('.collapse-content-demo').slideUp('slow')
     $('.up_down').attr('is_up', '1')

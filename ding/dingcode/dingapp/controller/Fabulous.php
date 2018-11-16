@@ -58,7 +58,7 @@ class Fabulous extends Common
            $appevent_arr['date'] = date("Y-m-d");
            $appevent_arr['create_time'] = $datetime;
            $res_app=model("Fabulous")->approval($app_arr,$appevent_arr,$apply_user_id,$code);
-           $url = "/?dd_nav_bgcolor=FF5E97F6&corpid=".$this->corpid;
+           $url = "/home?dd_nav_bgcolor=FF5E97F6";
            header("Location:$url");
 
 

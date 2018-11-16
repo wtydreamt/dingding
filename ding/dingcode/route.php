@@ -13,8 +13,8 @@ use think\Route;
 
 Route::get("","dingapp/index/index");
 Route::get("home","dingapp/index/home");
-Route::rule("getuser","dingapp/index/getuser");     //授权获取用户信息
-
+Route::rule("getuser","dingapp/index/getuser");              //授权获取用户信息
+Route::rule("getEvent","dingapp/index/getEvent");    //HomegetEvent
 //我的模块
 Route::rule("myindex","dingapp/Myindex/index");     //我的个人中心
 Route::rule("framework","dingapp/Myindex/framework");     //组织架构
@@ -25,6 +25,8 @@ Route::rule("insertaaa","dingapp/Fabulous/insertaaa");
 
 //工作台
 Route::rule("workbench","dingapp/Workbench/index"); //工作台
+Route::rule("mytrial","dingapp/Workbench/mytrial"); //我的审核
+
 
 
 //奖扣
@@ -32,6 +34,7 @@ Route::rule("buckle","dingapp/buckle/index");                //奖扣申请
 Route::rule("get_events","dingapp/buckle/get_events");       //获取事件
 Route::rule("events_info","dingapp/buckle/get_events_info"); //获取事件详情
 Route::rule("BuckleInsert","dingapp/buckle/BuckleInsert");   //事件数据插入 
+
 //消息通知
 Route::rule("Sendmsg","dingapp/buckle/Sendmsg");
 

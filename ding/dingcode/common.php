@@ -42,3 +42,23 @@ function estatus($status_code){
 		 }
 
 }
+
+function getName($arr,$key){
+
+		 if(isset($arr[$key])){
+		 	return $arr[$key];
+		 }else{
+		 	return "悦积分";
+		 }
+
+}
+
+function cyabs($number){
+
+		 if(abs($number) == $number){
+		 	return "+".$number;
+		 }else{
+		 	return $number;
+		 }
+
+}

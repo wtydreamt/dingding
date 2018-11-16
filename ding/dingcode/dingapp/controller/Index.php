@@ -5,6 +5,7 @@ use think\dingapi\DingCache;
 use app\dingapp\model\User;
 use app\dingapp\model\Office;
 use think\Session;
+use think\Db;
 
 
 class Index extends Common
@@ -46,12 +47,32 @@ class Index extends Common
 
 	}
 
+	//首页--点赞数据
 	public function home(){
+		   $Fabulous = model("Fabulous")->GetBuckle();
+		   $Fabulous = collection($Fabulous)->toArray();
+		   $c_user   = array_column($Fabulous,'create_user');  //获取当前记录赞赏人
+		   $s_user   = array_column($Fabulous,'s_user');       //获取当前受赞赏人
 
-		   
+		   $c_user_list= model("user")->GetAll($c_user);
+		   $s_user_list= model("user")->GetAll($s_user);
+		   $user_list  = array_merge($c_user_list,$s_user_list);
 
-		   return $this->fetch("home",["title"=>"悦积分"]);
+		   $event_list=$this->getEvent();
+
+
+		   return $this->fetch("home",["title"=>"悦积分","Fabulous"=>$Fabulous,"user_list"=>$user_list,"event"=>$event_list]);
 
 	}
 
+	//首页奖扣数据
+	public function getEvent(){
+
+		   $arr=model("Fabulous")->GetEvent();
+		   $arr=collection($arr)->toArray();
+		   $event_user=array_column($arr,'create_user_id');
+		   $user_list= model("user")->GetAll($event_user);
+		   return array("event"=>$arr,"user"=>$user_list);
+
+	}
 }

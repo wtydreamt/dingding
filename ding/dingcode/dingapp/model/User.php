@@ -90,12 +90,30 @@ class User extends Model
 
 	  //用户积分扣减行为
 	  public function IncDec($type,$field,$userid,$num){
+
 	  		 $corpid=session::get("corpid");
 	  		 if($type == "Inc"){
-	  		 	$res = $this->where("dd_id",$userid)->where("cust_id",$corpid)->setInc($field,$num);
+	  		 	$res = $this->where("dd_id=:dd_id AND cust_id=:cust_id")->bind(['dd_id'=>$userid,'cust_id'=>$corpid])->setInc($field,$num);
 	  		 }else if($type == "Dec"){
-	  		 	$res = $this->where("dd_id",$userid)->where("cust_id",$corpid)->setDec($field,$num);
+	  		 	$res = $this->where("dd_id=:dd_id AND cust_id=:cust_id")->bind(['dd_id'=>$userid,'cust_id'=>$corpid])->setDec($field,$num);
 	  		 }
              return $res;
+
+	  }
+
+	  //获取当前公司所有用户信息
+	  public function GetAll($where){
+
+	  		 $corpid=session::get("corpid");
+
+	  		 $userall = $this->where("cust_id=:cust_id")->bind(['cust_id'=>$corpid])->where('dd_id','in',$where)->field("name,dd_id")->select();
+
+	  		 $user_temp = [];
+
+	  		 foreach($userall as $key=>$val){
+	  		 	$user_temp[$val['dd_id']] = $val['name'];
+	  		 }
+
+	  		 return $user_temp;
 	  }
 }

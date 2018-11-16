@@ -1,7 +1,7 @@
 <?php
 namespace app\dingapp\model;
 use think\Model;
-
+use think\Session;
 class Fabulous extends Model
 {	  
 	  protected $table = 'approval';
@@ -72,13 +72,30 @@ class Fabulous extends Model
 	  }
 	  
 
-	  //获取奖扣列表
+	  // 获取奖扣列表
 	  
-	  // public function GetBuckle(){
+	  public function GetBuckle(){
 
-	  // 		 $this->alias('a')
-	  // 		 ->join("user u" , " a.corp_id = u.cust_id")
-	  // 		 ->join("")
+	  	     $corpid = session::get("corpid");
+	  		 return  $likes  = $this->alias('a')
+	  		 ->join("approval_event e" , " a.id = e.approval_id")
+	  		 ->join("approval_derive d", "e.id = d.a_id")
+	  		 ->where("a.corp_id",$corpid)->where("e.is_likes",1)
+	  		 ->field("a.create_user_id as create_user, d.user_id as s_user, a.create_date as a_date,e.label,e.event_desc")
+	  		 ->group('d.a_id')->select();
 
-	  // }
+	  }
+
+	  // 获取奖扣列表
+	  public function GetEvent(){
+
+	  	     $corpid = session::get("corpid");
+	  		 return  $likes  = $this->alias('a')
+	  		 ->join("approval_event e" , " a.id = e.approval_id")
+	  		 ->join("approval_derive d", "e.id = d.a_id")
+	  		 ->where("a.corp_id",$corpid)->where("e.is_likes",0)->where("is_month",0)
+	  		 ->field("a.create_user_id, a.create_date as a_date,e.event_name, count(d.a_id) as num,code_b,code_c")
+	  		 ->group('d.a_id')->select();
+
+	  }	  
 }

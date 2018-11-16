@@ -134,5 +134,5 @@ ThinkPHP® 商标和著作权所有者为上海顶想信息科技有限公司。
 
 
 
-
-//福田没有消耗的余额
+explain
+system > const > eq_ref > ref > fulltext > ref_or_null > index_merge > unique_subquery > index_subquery > range > index > ALL

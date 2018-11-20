@@ -116,4 +116,9 @@ class User extends Model
 
 	  		 return $user_temp;
 	  }
+
+	  public function getUserName($userid){
+	  	     $corpid=session::get("corpid");
+	  	     return model("User")->where("cust_id",$corpid)->where("dd_id",$userid)->field("name")->find();
+	  }
 }

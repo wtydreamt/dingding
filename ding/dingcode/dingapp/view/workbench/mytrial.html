@@ -1,99 +1,44 @@
 <link rel="stylesheet" type="text/css" href="/static/css/mytrial.css"/>
-
 <div role="tablist" class="t-tab-bar" tabindex="0">
     <div role="tab" aria-disabled="false" aria-selected="false" class=" t-tab-tab" data-reactid="1">
-        <span id="Firsttrial" data="MY_First" data_val="我的初审">我的初审<i class="fas fa-angle-down"></i></span>
+        <span id="Firsttrial" data="{$First_trial.data}" data_val="{$First_trial.data_val}">{$First_trial.data_val}<i class="fas fa-angle-down"></i></span>
     </div>
     <div role="tab" aria-disabled="false" aria-selected="false" class=" t-tab-tab" data-reactid="1">
-        <span id="search_date" data="">时间<i class="fas fa-angle-down"></i></span>
+        <span id="search_date" data="{$date}">{if condition="($date)"}{$date}{else /}时间{/if}<i class="fas fa-angle-down"></i></span>
     </div> 
     <div role="tab" aria-disabled="false" aria-selected="false" class=" t-tab-tab" data-reactid="1">
-        <span id="search_state" data="0">审核状态<i class="fas fa-angle-down"></i></span>
+        <span id="search_state" data="{$status}">{:Mytrial_Status($status)}<i class="fas fa-angle-down"></i></span>
     </div>       
 </div>
-<script>
-    $(function () {
-        var now      = new Date()
-        var nowYear  = now.getFullYear()
-        var nowMonth = now.getMonth() + 1
-        var nowDay   = now.getDate()        
-        var times     = nowYear + '-' + nowMonth + '-' + nowDay
-        $('#search_date').html(times + ' <i class="fas fa-angle-down"></i>');
-        $('#search_date').attr("data",times);
-
-        $('#search_date').click(function () {
-            var time = nowYear + '-' + nowMonth + '-' + nowDay
-            dd.ready(function () {
-                dd.biz.util.datepicker({
-                    format   : 'yyyy-MM-dd',
-                    value    : time, //默认显示日期
-                    onSuccess: function (result) {
-                        $('#search_date').html(result.value + ' <i class="fas fa-angle-down"></i>')
-                        $('#search_date').children().css('color', '#38adff')
-                        openLinkRep(url)
-                    }, onFail: function (err) {
-                        alert(JSON.stringify(err))
-                    }
-                })
-            })
-        })
-        $('#Firsttrial').click(function () {
-            var state = $(this).attr("data_val");
-            dd.ready(function () {
-                dd.biz.util.chosen({
-                    source     : [{
-                        key  : '我的初审',
-                        value: 'MY_First'
-                    }, {
-                        key  : '我的终审',
-                        value: 'MY_End'
-                    }],
-                    selectedKey: state,
-                    onSuccess  : function (result) {
-                        $("#Firsttrial").attr("data_val",result.key)
-                        $("#Firsttrial").html(result.key + ' <i class="fas fa-angle-down"></i>')
-                        $("#Firsttrial").children().css('color', '#38adff')
-                    },
-                    onFail     : function (err) {
-                        alert(JSON.stringify(err))
-                    }
-                })
-            })
-        })        
-        $('#search_state').click(function () {
-            var type = $(this).attr("data");
-            if(type == "10" || type =="0"){
-              var state = '全部'  
-            }else if(type == "2"){
-              var state = '通过' 
-            }else if(type == "3"){
-              var state = '驳回' 
-            }
-            
-            dd.ready(function () {
-                dd.biz.util.chosen({
-                    source     : [{
-                        key  : '全部',
-                        value: '10'
-                    },{
-                        key  : '通过',
-                        value: '2'
-                    },{
-                        key  : '驳回',
-                        value: '3'
-                    }],
-                    selectedKey: state,
-                    onSuccess  : function (result) {
-                        $('#search_state').attr("data",result.value)
-                        $('#search_state').html(result.key + ' <i class="fas fa-angle-down"></i>')
-                        $('#search_state').children().css('color', '#38adff')
-                    },
-                    onFail     : function (err) {
-                        alert(JSON.stringify(err))
-                    }
-                })
-            })
-        })
-
-    })
-</script>
+{if condition="(!empty($data_list))"}
+    {volist name="data_list" id="val"}
+<div class="card-wrap link " style="margin-top: 10px" data-url="/Approval_detail?trial={$First_trial.data}&id={$val.id}">
+    <div class="t-card card-sence">
+        <div class="t-card-header">
+            <div class="t-avatar" style="width:40px;height:40px;line-height:40px;font-size:14px;position:relative;background-color:#5EC9F6;">{:splitName($val['name'])[1]}</div>
+<!--            <img class="card-avatar" src="https://work.alibaba-inc.com/photo/WB217531.jpg?" alt="avatar">-->
+            <div class="card-header-text"><span class="card-username">{$val.name}</span><span class="card-date">{$val.create_date}</span></div>
+        </div>
+        <div class="t-card-body">
+            <div class="card-title">{$val.event_name}</div>
+            <p class="card-desc">{$val.event_desc}</p>
+        </div>
+        <div class="t-card-footer">
+            <div class="card-footer-meta">
+                <span class="card-footer-meta-item">
+                    <span class="card-eye-count">{$val.date}</span>
+                </span>
+                <span class="card-footer-meta-item">
+                    <span class="card-like-count"></span>
+                </span>
+            </div>
+            <div class="card-footer-extra" {if condition="($val.status == 2)"} style="color: #5EC9F6"{/if}>{:Mytrial_Status($val.status)}</div>
+        </div>
+    </div>
+</div>
+<div class="t-group-head t-demo-title" style="height: 0.5rem"></div>
+{/volist}
+{else /}
+<div style="line-height: 40px;border-top: none;color: #999;font-size: 14px;text-align: center">暂无数据</div>
+{/if}
+<script type="text/javascript" src="/static/dingding/mytrial.js"></script>

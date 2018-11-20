@@ -27,8 +27,9 @@ class Index extends Common
     	   }else{
     	  	 session::set("corpid",$corpid);
     	   }
-    	   
+    	   // model("Office")->Framework();
     	   $config = DingCache::IsvConfig($corpid); 
+    	   
     	   return $this->fetch("index",['corpid'=>$corpid,"config"=>$config,"title"=>"悦积分"]);
 
     }
@@ -57,10 +58,7 @@ class Index extends Common
 		   $c_user_list= model("user")->GetAll($c_user);
 		   $s_user_list= model("user")->GetAll($s_user);
 		   $user_list  = array_merge($c_user_list,$s_user_list);
-
 		   $event_list=$this->getEvent();
-
-
 		   return $this->fetch("home",["title"=>"悦积分","Fabulous"=>$Fabulous,"user_list"=>$user_list,"event"=>$event_list]);
 
 	}

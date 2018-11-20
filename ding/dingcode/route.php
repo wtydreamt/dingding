@@ -25,8 +25,9 @@ Route::rule("insertaaa","dingapp/Fabulous/insertaaa");
 
 //工作台
 Route::rule("workbench","dingapp/Workbench/index"); //工作台
-Route::rule("mytrial","dingapp/Workbench/mytrial"); //我的审核
-
+Route::rule("mytrial","dingapp/Workbench/mytrial"); //我的审判
+Route::rule("Approval_detail","dingapp/Workbench/Approval_detail"); //审核细节
+Route::rule("isadopt","dingapp/Workbench/Approval_is_adopt");       //审核是否通过
 
 
 //奖扣
@@ -37,6 +38,7 @@ Route::rule("BuckleInsert","dingapp/buckle/BuckleInsert");   //事件数据插�
 
 //消息通知
 Route::rule("Sendmsg","dingapp/buckle/Sendmsg");
+
 
 
 //兑换模块

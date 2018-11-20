@@ -110,7 +110,7 @@ class Buckle extends Common
             ,$data['first_user_name']
             ,$data['end_user_name']
             ,$data['user_object']
-            ,$event_data);
+            ,$event_data,"待初审");
             echo $res = SendMessage::SendWorkmsg($this->corpid,$json_data);  
     }
 

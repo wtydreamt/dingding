@@ -54,23 +54,6 @@ class Approvale extends Model
 	  		 	$approval->commit();
 	  		 	$Approvale->commit();
 	  		 	$Approvald->commit();	
-	  		 	
-	  		 	foreach($Approvald_arr as $key=>$val){
-	  		 		$data = [];
-		  		    if($val['code_c'] && $val['code_c'] > 0){
-		  		       $data['code_c'] = $val['code_c'];
-		  		    }else if($val['code_c'] && $val['code_c'] < 0){
-		  		       $data['buckle_c'] = $val['code_c'];
-		  		    }
-		  		    if($val['code_b'] && $val['code_b'] > 0){
-		  		       $data['code_be'] = $val['code_b'];
-		  		    }else if($val['code_b'] && $val['code_b'] < 0){
-		  		       $data['buckle_be'] = $val['code_b'];
-		  		    }	  		    
-		  		 	model("Approvalcount")->CheckCount($val['user_id'],$event_data['corp_id'],$data);
-
-	  		 	}
-	  		 	
 	  		 	return ReturnJosn("OK","200","事件提交成功");die;         	
 	         } 		 
 	  }

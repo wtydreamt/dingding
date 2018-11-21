@@ -14,14 +14,16 @@ use think\Route;
 Route::get("","dingapp/index/index");
 Route::get("home","dingapp/index/home");
 Route::rule("getuser","dingapp/index/getuser");              //授权获取用户信息
-Route::rule("getEvent","dingapp/index/getEvent");    //HomegetEvent
+Route::rule("getEvent","dingapp/index/getEvent");            //HomegetEvent
 //我的模块
-Route::rule("myindex","dingapp/Myindex/index");     //我的个人中心
-Route::rule("framework","dingapp/Myindex/framework");     //组织架构
+Route::rule("myindex","dingapp/Myindex/index");          //我的个人中心
+Route::rule("framework","dingapp/Myindex/framework");    //组织架构
 
 //赞赏
 Route::rule("fabulous","dingapp/Fabulous/index");     
 Route::rule("insertaaa","dingapp/Fabulous/insertaaa");
+Route::rule("follow","dingapp/Fabulous/follow");        //跟赞   
+
 
 //工作台
 Route::rule("workbench","dingapp/Workbench/index"); //工作台

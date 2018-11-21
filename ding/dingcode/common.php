@@ -206,3 +206,56 @@ function splitName($fullname)
         return cyabs($code);
        }
 }
+
+function is_follow($create_user_id,$user_id){
+         $userid = get_userid();
+
+         if($userid == $create_user_id || in_array($userid,$user_id)){
+            return true;
+         }else{
+            return false;
+         }
+}
+
+function dateFormat($create_date)
+{
+    $timestamp = strtotime($create_date);
+
+    return tranTime($timestamp);
+}
+
+function tranTime($time)
+{
+    $rtime = date("m-d H:i",$time);
+    $htime = date("H:i",$time);
+          
+    $time = time() - $time;
+          
+    if ($time < 60)
+    {
+        $str = '刚刚';
+    }
+    elseif ($time < 60 * 60)
+    {
+        $min = floor($time/60);
+        $str = $min.'分钟前';
+    }
+    elseif ($time < 60 * 60 * 24)
+    {
+        $h = floor($time/(60*60));
+        $str = $h.'小时前 ';
+    }
+    elseif ($time < 60 * 60 * 24 * 3)
+    {
+        $d = floor($time/(60*60*24));
+        if($d==1)
+            $str = '昨天 ';
+        else
+            $str = '前天 ';
+    }
+    else
+    {
+        $str = $rtime;
+    }
+    return $str;
+}          

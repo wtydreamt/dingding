@@ -80,34 +80,53 @@
                 </div>
             </div>
             <div class="t-card-body">
-                <div class="card-title">来自<span style="color:dodgerblue; ">{:getName($user_list,$val['create_user'])}</span>的赞赏<br/><span></span><br/><input class="label t-button t-button-secondary t-button-size-medium" type="button" value="{$val['label']}"></div>
+                <div class="card-title">来自<span style="color:dodgerblue; ">{:getName($user_list,$val['create_user'])}</span>的赞赏<br/>
+                    <span>{$val['event_desc']}</span><br/>
+                    <input class="label t-button t-button-secondary t-button-size-medium" type="button" value="{$val['label']}"></div>
             </div>
             <div class="t-card-footer">
                 <div class="card-footer-meta">
                 </div>
-
-                <div class="card-footer-extra link-new down_likes" data-url="" ><i class="fas fa-thumbs-up card-footer-hand" style="font-size: 16px;"></i><span style="color: dodgerblue;">点赞</span></div>
-
+                {php} if(!is_follow($val['create_user'],$userid)){ {/php}
+                <div class="card-footer-extra link-new down_likes" data-url="/follow?dd_nav_bgcolor=FF5E97F6&id={$val['id']}&like_id={$val['like_id']}" ><i class="fas fa-thumbs-up card-footer-hand" style="font-size: 16px;"></i><span style="color: dodgerblue;">点赞</span></div>
+                {php} }else{ {/php}
+                <div class="card-footer-extra"><i class="fas fa-thumbs-up card-footer-hand already_like"></i>已赞</div>
+                {php} } {/php}
             </div>
-
+            {if condition="(isset($follow[$val['like_id']]))"}
+                             
             <!--跟赞 begin-->
             <div class="t-collapse" style="background-color: #E8E8E8">
                 <div class="t-collapse-item t-collapse-item-active parent" role="tablist">
-                    <div class="t-collapse-header my-header-class up_down" is_up="1" role="tab" aria-expanded="true"><i class="fas fa-angle-down" id='label'></i><span>已跟赞1人</span></div>
+                    <div class="t-collapse-header my-header-class up_down" is_up="1" role="tab" aria-expanded="true"><i class="fas fa-angle-down" id='label'></i><span>已跟赞{$follow[$val['like_id']]['count']}人</span></div>
                     <div class="t-collapse-content t-collapse-content-active" role="tabpanel" style="">
                         <div class="t-collapse-content-box">
                             <div class="collapse-content-demo" style="border: 2px solid #E8E8E8;border-width:0 2px 2px;">
-                 
+                                    {volist name="follow[$val['like_id']]['data']" id="dval"} 
                                     <div class="follow_list">
-                                        <span style="margin-left: 1rem;">展示</span>
-                                        <span class="follow_time">1周期</span>
+                                        <span style="margin-left: 1rem;">{$dval.name}:{$dval.desc}</span>
+                                        <span class="follow_time">{:dateFormat($dval.date)}</span>
                                     </div>
-
+                                    {/volist}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+                
+                {else /}
+                <div class="t-collapse" style="background-color: #E8E8E8">
+                    <div class="t-collapse-item t-collapse-item-active parent" role="tablist">
+                        <div class="t-collapse-header my-header-class up_down" is_up="1" role="tab" aria-expanded="true"><i class="fas fa-angle-down" id='label'></i><span>已跟赞0人</span></div>
+                        <div class="t-collapse-content t-collapse-content-active" role="tabpanel" style="">
+                            <div class="t-collapse-content-box">
+                                <div class="collapse-content-demo" style="border: 2px solid #E8E8E8;border-width:0 2px 2px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {/if}
             <!--跟赞 end-->
         </div>
     </div>

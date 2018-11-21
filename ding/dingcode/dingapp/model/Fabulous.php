@@ -12,10 +12,11 @@ class Fabulous extends Model
 	  	     //创建点赞事件申请
 	  		 $approval=model("Fabulous");
              $approval->startTrans();
-
+             $name = date("Y-m-d").".txt";
 	  		 $res = $approval->allowField(true)->save($approval_S);
 	  		 if(!$res){
 	  		 	$approval->rollback();
+	  		 	error_log ( json_encode(array("创建点赞事件"=>$approval_S),JSON_UNESCAPED_UNICODE),3,"log/"."err".$name );
 	  		 	return ReturnJosn("NO","-1","事件提交失败");die;
 	  		 }
 	  		 //创建点赞事件记录
@@ -23,9 +24,11 @@ class Fabulous extends Model
 	  		 $Approvale->startTrans();
 	  		 $event_arr['approval_id'] = $approval->id;
 	  		 $res_event=$Approvale->allowField(true)->save($event_arr);
+
 	  		 if(!$res_event){
 	  		 	$approval->rollback();
 	  		 	$Approvale->rollback();
+	  		 	error_log ( json_encode(array("创建点赞事件记录"=>$event_arr),JSON_UNESCAPED_UNICODE),3,"log/"."err".$name );
 	  		 	return ReturnJosn("NO","-1","事件提交失败");die;
 	  		 }
 	  		 //事件记录派生表数据插入
@@ -46,6 +49,7 @@ class Fabulous extends Model
 	  		 	$approval->rollback();
 	  		 	$Approvale->rollback();
 	  		 	$Approvald->rollback();
+	  		 	error_log ( json_encode(array("福分不足"=>$balance,"code"=>$code,"dd_id"=>$approval_S['create_user_id']),JSON_UNESCAPED_UNICODE),3,"log/"."err".$name );
 	  		 	return ReturnJosn("NO","-1","事件提交失败");die;	  		 	
 	  		 }
 	  		 $user = model("User");
@@ -60,6 +64,7 @@ class Fabulous extends Model
 	  		 	$Approvale->rollback();
 	  		 	$Approvald->rollback();
 	  		 	$user->rollback();
+			    error_log ( json_encode(array("奖扣分数扣减异常"),JSON_UNESCAPED_UNICODE),3,"log/"."err".$name );	  		 	
 	  		 	return ReturnJosn("NO","-1","奖扣分数扣减异常");die;
 	  		 }else{
 	  		 	$approval->commit();
@@ -74,7 +79,7 @@ class Fabulous extends Model
 	  }
 	  
 
-	  // 获取奖扣列表
+	  // 获取点赞列表
 	  
 	  public function GetBuckle(){
 
@@ -82,8 +87,8 @@ class Fabulous extends Model
 	  		 return  $likes  = $this->alias('a')
 	  		 ->join("approval_event e" , " a.id = e.approval_id")
 	  		 ->join("approval_derive d", "e.id = d.a_id")
-	  		 ->where("a.corp_id",$corpid)->where("e.is_likes",1)
-	  		 ->field("a.create_user_id as create_user, d.user_id as s_user, a.create_date as a_date,e.label,e.event_desc")
+	  		 ->where("a.corp_id",$corpid)->where("e.is_likes",1)->where("e.like_id",0)
+	  		 ->field("d.id,e.id as like_id,a.create_user_id as create_user, d.user_id as s_user, a.create_date as a_date,e.label,e.event_desc")
 	  		 ->group('d.a_id')->select();
 
 	  }
@@ -126,7 +131,6 @@ class Fabulous extends Model
 			  	       if($status != 10){
 			  	       	 $query_where = $query_where->where("status",$status);
 			  	       }
-			  	       
 			         return $data_list = $query_where->distinct(true)->field("a.create_date,e.id,e.event_name,a.status,u.name,u.dd_avatar,e.date,e.event_desc")->order('a.create_date desc')->select();
 
 
@@ -175,43 +179,84 @@ class Fabulous extends Model
              ->where("a.corp_id",$corpid)->where("a.id",$id);
 
              $save_data = [];
+             //初审 或 终审通过
              if($type == "end"){
-             	$save_data['end_date'] = date("Y-m-d H:is");
+             	$save_data['end_date'] = date("Y-m-d H:i:s");
              	$save_data['status']   = "2";
              	$save_data['end_remark']   = $desc;
              	$info = $info_obj->where("end_user_id",$userid)->field("create_user_id,end_user_id,first_user_id,event_name,a.id as a_id, e.id as e_id")->find();
-
              }else if($type == "first"){
              	$save_data['first_date'] = date("Y-m-d H:i:s");
              	$save_data['status']     = "1";
              	$save_data['first_remark']   = $desc;
              	$info = $info_obj->where("first_user_id",$userid)->field("create_user_id,event_name,end_user_id,first_user_id,a.id as a_id, e.id as e_id")->find();
-
              }
              //审核驳回
              if($status == "reject"){
              	$save_data['status']     = "3";
              } 
-             $res = $this->reject($id,$save_data,$info,$status,$type);
-             if($type == "first" && $status == "adopt"){
-  				$this->sendmsg($corpid,$info,$info['end_user_id']);
+             $res = $this->adopt_or_reject($id,$save_data,$info);
+
+             if($res == 1){
+
+             	$res_send = json_encode(array("errcode"=>"D0")); //没有消息通知
+
+             	//初审或终审通过时 发送工作通知
+		        if($type == "first" && $status == "adopt"){
+		 	          $res_send = $this->sendmsg($corpid, $info, $info['end_user_id'], $type, $status);
+		        }else if($type == "end" && $status == "adopt"){
+		        	  $res_send = $this->sendmsg($corpid, $info, "", $type, $status);
+		        }
+		        $res_send = json_decode($res_send,true);
+		        echo ReturnJosn("ok","0",$res_send);die;
+             }else if($res == -1){
+             	echo ReturnJosn("ok","-1","");die;
              }
+
+
+
 	  }
 
-	  public function sendmsg($corpid,$info,$userobj){
-
+	  public function sendmsg($corpid,$info,$userobj,$type="",$status=""){
              	 $event_data = "";
 	             $userid = model("Approvald")->where("a_id",$info['e_id'])->where("cust_id",$corpid)->field("user_id,code_b,code_c")->select();
 
 	             if($userid['0']['code_b']){
 	             	$event_data = ($userid['0']['code_b'] > 0) ? "D分：+".$userid['0']['code_b'] : "D分：".$userid['0']['code_b'];
 	             }
+
 	             if($userid['0']['code_c']){
 	             	$event_data = ($userid['0']['code_c'] > 0) ? "C分：+".$userid['0']['code_c'] : "C分：".$userid['0']['code_c'];
 	             }
+
 	             $userid     = collection($userid)->toArray();
-	             $userlist   = array_column($userid,"user_id");  
-	             $user_name  = model("user")->where("cust_id",$corpid)->where("dd_id","in",$userlist)->field("name")->select();
+	             $userlist   = array_column($userid,"user_id"); //奖扣人列表	 
+
+	             //终审通过时更改月度记录表
+	             if($type == "end" && $status == "adopt"){
+
+		  		 		foreach($userid as $key=>$val){
+				  		 		$data = [];
+					  		    if($val['code_c'] && $val['code_c'] > 0){
+					  		       $data['code_c'] = $val['code_c'];
+					  		    }else if($val['code_c'] && $val['code_c'] < 0){
+					  		       $data['buckle_c'] = $val['code_c'];
+					  		    }
+					  		    if($val['code_b'] && $val['code_b'] > 0){
+					  		       $data['code_be'] = $val['code_b'];
+					  		    }else if($val['code_b'] && $val['code_b'] < 0){
+					  		       $data['buckle_be'] = $val['code_b'];
+					  		    }
+					  		  	  		    
+			  		 	        model("Approvalcount")->CheckCount($val['user_id'],$corpid,$data);
+		  		 	    }
+
+	             	$userobj = implode(",", $userlist);
+
+	             }
+
+	             $user_name  = model("user")->where("cust_id",$corpid)->where("dd_id","in",$userlist)->field("name")->select(); //奖扣人姓名
+
 	             $user_name  = collection($user_name)->toArray();
 	             $userstring = array_column($user_name,"name"); 
 	             $userstring = implode(",", $userstring);
@@ -220,18 +265,17 @@ class Fabulous extends Model
 	             $first_name =model("User")->getUserName($info['first_user_id']);
 	             $end_name=model("User")->getUserName($info['end_user_id']);
 				 $json_data = SendMessage::MessageData($corpid,$create_name['name']
-				  ,$info['event_name']
-				  ,$userstring
-				  ,$first_name['name']
-				  ,$end_name['name']
-				  ,$userobj
-				  ,$event_data,"初审通过");
-
-				  echo $res = SendMessage::SendWorkmsg($corpid,$json_data); 	
-
+				 ,$info['event_name']
+				 ,$userstring
+				 ,$first_name['name']
+				 ,$end_name['name']
+				 ,$userobj
+				 ,$event_data."测试通知","初审通过");
+				 return $res = SendMessage::SendWorkmsg($corpid,$json_data);
 	  }
 
-	  public function reject($id,$save_data,$info,$status,$type){
+	  public function adopt_or_reject($id,$save_data,$info){
+
              $approval = model("Fabulous");
              $approval->startTrans();
              $res_a = $approval->save($save_data,['id'=>$id]);
@@ -242,11 +286,10 @@ class Fabulous extends Model
              if(!$res_d || !$res_a){
 	  		 	$approval->rollback();
 	  		 	$approvald->rollback();
-	  		 	return "-1";             	    
+	  		 	return "-1";exit();           	    
              }  
-             
 	  		 $approval->commit();
 	  		 $approvald->commit();  
-	  		    return "1"; 	  	
+	  		 return "1";exit(); 	  	
 	  }
 }

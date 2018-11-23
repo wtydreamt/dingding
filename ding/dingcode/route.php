@@ -31,12 +31,16 @@ Route::rule("mytrial","dingapp/Workbench/mytrial"); //我的审判
 Route::rule("Approval_detail","dingapp/Workbench/Approval_detail"); //审核细节
 Route::rule("isadopt","dingapp/Workbench/Approval_is_adopt");       //审核是否通过
 
+ 
+
+
 
 //奖扣
 Route::rule("buckle","dingapp/buckle/index");                //奖扣申请
 Route::rule("get_events","dingapp/buckle/get_events");       //获取事件
 Route::rule("events_info","dingapp/buckle/get_events_info"); //获取事件详情
 Route::rule("BuckleInsert","dingapp/buckle/BuckleInsert");   //事件数据插入 
+Route::rule("award_list","dingapp/buckle/award_list");       //奖扣记录
 
 //消息通知
 Route::rule("Sendmsg","dingapp/buckle/Sendmsg");

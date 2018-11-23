@@ -22,24 +22,15 @@
 		
 		</div>
 		{/volist}
-
-
-<!-- 		<div class="t-collapse-item" >
-			<div class="t-collapse-header" aria-expanded="false" style="text-align:center" role="tab" tabindex="0">
-				<i class="arrow"></i>
-				<span >自定义头</span>
-			</div>
-		</div>		
-		<div class="t-collapse-item t-collapse-item-active" >
-			<div class="t-collapse-header" aria-expanded="true" style="text-align:center" role="tab" tabindex="0">
-				<i class="arrow"></i>
-				<span >纯字符串头</span>
-			</div>
-		</div> -->
 	</div>
 </div>
-
+<script type="text/javascript">
+    var  _config ={$config};
+</script>
+<script type="text/javascript" src="/static/logger.js"></script>
+<script type="text/javascript" src="/static/dingding/config.js"></script>
 <script>
+
 	$(function(){
 		$(".parent").click(function(){
 			var dingding_id = $(this).attr("data");
@@ -61,6 +52,17 @@
 				$(".item-list_"+dingding_id).attr("ria-expanded",false);
 			}
 		})
+	dd.ready(function () {
+		dd.biz.navigation.setRight({
+		    show: true,//控制按钮显示， true 显示， false 隐藏， 默认true
+		    control: true,//是否控制点击事件，true 控制，false 不控制， 默认false
+		    text: '同步',//控制显示文本，空字符串表示显示默认文本
+		    onSuccess : function(result) {
+		    	alert(1);
+		    },
+		    onFail : function(err) {}
+		});
+     })			
 	})
 </script>
 

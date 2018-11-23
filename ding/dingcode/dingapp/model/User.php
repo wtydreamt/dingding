@@ -17,7 +17,7 @@ class User extends Model
 
 	  	     if($data['errmsg']  == "ok"){
 
-	  	     	$res = Db::table("sys_user")->where("cust_id", $cust_id)->where("dd_id", $data['userid'])->field('id')->find();
+	  	     	$res = Db::table("sys_user")->where("cust_id", $cust_id)->where("dd_id", $data['userid'])->field('id,name')->find();
 	  	     	if($res){
 
 	  	     		session::set($cust_id."userid",$data['userid']);

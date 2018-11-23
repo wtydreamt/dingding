@@ -56,15 +56,6 @@ class Workbench extends Common
       */
      public function Approval_is_adopt($id, $remark, $status, $type){
 
-            // $json_data = SendMessage::MessageData("dingc74412f7259da97f35c2f4657eb6378f","柒宗罪"
-            // ,"罩得住"
-            // ,"猴哥"
-            // ,"王廷昱"
-            // ,"王亭钰"
-            // ,'manager6775,1829086261940537'
-            // ,"膜拜吧","初审通过");
-            // echo $res = SendMessage::SendWorkmsg("dingc74412f7259da97f35c2f4657eb6378f",$json_data);die;
-
             model("Fabulous")->is_adopt($id, $remark, $status, $type);die;
 
      }

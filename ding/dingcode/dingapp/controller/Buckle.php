@@ -126,4 +126,16 @@ class Buckle extends Common
 
     }
 
+    //奖扣列表
+    public function award_list($page=1, $time ="", $status="10", $method = ""){
+           $number = ($page-1) * 3;
+           $list   = model("Approvald")->award_list($number, $time, $status);
+           $number = count($list);
+           if(!$method){
+           return $this->fetch("award_list",['title'=>"奖扣列表","list"=>$list,"page"=>$page,"time"=>$time,"status"=>$status,"number"=>$number]);
+           }else{
+           echo ReturnJosn("ok","0",array("list"=>$list,"num"=>$number,"page"=>$page));
+           }
+    }
+
 }

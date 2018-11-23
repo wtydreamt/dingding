@@ -3,6 +3,8 @@ namespace app\dingapp\controller;
 use app\common\controller\Common;
 use app\dingapp\model\User;
 use app\dingapp\model\Office;
+use think\dingapi\DingCache;
+use think\session;
 
 class Myindex extends Common
 {
@@ -31,8 +33,9 @@ class Myindex extends Common
     	$user = new User();
 
     	$framework= $user->getframework();
-
-    	return $this->fetch("framework",['title'=>"组织架构","user"=>$framework['user'],"office"=>$framework['office']]);
+        $corpid = session::get("corpid");
+        $config = DingCache::IsvConfig($corpid);
+    	return $this->fetch("framework",['title'=>"组织架构","config"=>$config,"user"=>$framework['user'],"office"=>$framework['office']]);
 
     }
 

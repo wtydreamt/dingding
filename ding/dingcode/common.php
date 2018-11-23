@@ -67,10 +67,10 @@ function Mytrial_Status($status){
          
          switch ($status) {
          	case '0':
-         		return "待初审";
+         		return "初审中";
          		break;
          	case '1':
-         		return "待终审";
+         		return "终审中";
          		break;
          	case '2':
          		return "通过";
@@ -87,6 +87,9 @@ function Mytrial_Status($status){
          }
 
 }
+
+
+
 function splitName($fullname)
 {
     $hyphenated = [
@@ -221,41 +224,23 @@ function dateFormat($create_date)
 {
     $timestamp = strtotime($create_date);
 
-    return tranTime($timestamp);
+    return friend_time($timestamp);
 }
 
-function tranTime($time)
-{
-    $rtime = date("m-d H:i",$time);
-    $htime = date("H:i",$time);
-          
-    $time = time() - $time;
-          
-    if ($time < 60)
-    {
-        $str = '刚刚';
+function friend_time($time) {
+    $t=time()-$time;
+    $f=array(
+    '31536000'=>'年',
+    '2592000'=>'个月',
+    '604800'=>'星期',
+    '86400'=>'天',
+    '3600'=>'小时',
+    '60'=>'分钟',
+    '1'=>'秒'
+    );
+    foreach ($f as $k=>$v) {
+        if (0 !=$c=floor($t/(int)$k)) {
+            return $c.$v.'前';
+        }
     }
-    elseif ($time < 60 * 60)
-    {
-        $min = floor($time/60);
-        $str = $min.'分钟前';
-    }
-    elseif ($time < 60 * 60 * 24)
-    {
-        $h = floor($time/(60*60));
-        $str = $h.'小时前 ';
-    }
-    elseif ($time < 60 * 60 * 24 * 3)
-    {
-        $d = floor($time/(60*60*24));
-        if($d==1)
-            $str = '昨天 ';
-        else
-            $str = '前天 ';
-    }
-    else
-    {
-        $str = $rtime;
-    }
-    return $str;
-}          
+}

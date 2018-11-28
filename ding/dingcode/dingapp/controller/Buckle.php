@@ -114,6 +114,17 @@ class Buckle extends Common
             echo $res = SendMessage::SendWorkmsg($this->corpid,$json_data);  
     }
 
+    //发送群消息
+    public function sendCath(){
+           $json_data = SendMessage::chatdata($this->corpid,$user['name']
+            ,$data['event_name']
+            ,$userstring
+            ,$data['first_user_name']
+            ,$data['end_user_name']
+            ,$data['user_object']
+            ,$event_data,"待初审");
+            echo $res = SendMessage::Sendchat($this->corpid,$json_data); 
+    }
 
     public function get_events($id = "",$name = ""){
            $Events_list=model("Events")->GetEvents($type = "0" ,$id ,$name);
@@ -128,14 +139,20 @@ class Buckle extends Common
 
     //奖扣列表
     public function award_list($page=1, $time ="", $status="10", $method = ""){
-           $number = ($page-1) * 3;
+           $number = ($page-1) * 10;
            $list   = model("Approvald")->award_list($number, $time, $status);
            $number = count($list);
+
            if(!$method){
            return $this->fetch("award_list",['title'=>"奖扣列表","list"=>$list,"page"=>$page,"time"=>$time,"status"=>$status,"number"=>$number]);
            }else{
            echo ReturnJosn("ok","0",array("list"=>$list,"num"=>$number,"page"=>$page));
            }
     }
+
+    public function award_details($id = 0){
+           $data = model("Approvald")->award_details($id);
+           return $this->fetch("award_details",["title"=>"奖扣详情","apply"=>$data['apply'],"prize_winner"=>$data['prize_winner'],"username"=>$data['user_name']]);
+    } 
 
 }

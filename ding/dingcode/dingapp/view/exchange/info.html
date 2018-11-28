@@ -72,7 +72,7 @@
 <div class="container-fluid">
     <nav class="navbar fixed-bottom nav"  style="padding-bottom: 0px;width: 100%;">
 		<div class="t-button t-button-minor t-button-normal t-button-size-medium nav" style="padding-bottom: 0px;width: 100%;margin:0px">
-			<span id="duihuan" class="btn_show">立即兑换</span>
+			<span id="duihuan" style="cursor:pointer" class="btn_show">立即兑换</span>
 		</div>
     </nav>
 </div>
@@ -88,9 +88,114 @@
 			  </div>			  
 	  </div>
 	  <div class="t-button t-button-minor t-button-normal t-button-size-medium" style="padding-bottom: 0px;width: 100%;margin:0px;border-left:none;border-right:none; border-bottom:none;">
-		<span id="dui" action="1">立即兑换</span>
+		<span id="dui" style="cursor:pointer" action="1">立即兑换</span>
 	  </div>
  </div>
 
-<script src="/static/app/dingcode/duihuan.js"></script>
+<script>
+	$(function(){
+
+		$("#jian").click(function(){
+			     var num = $("#number").val();
+
+			     var nums=num*1 - 1;
+
+			     if(nums > 0){
+			     	$("#number").val(nums);
+			     }
+		})
+		$("#jia").click(function(){
+
+			     var num = $("#number").val();
+
+			     var nums=num*1 + 1;
+
+			     $("#number").val(nums);
+
+		})	
+
+	  $('.btn_show').click(function() {
+	  	    Against();
+	  	   $(".container-fluid").hide();
+	  	   
+		   $('#mask').css({
+			   display: 'block',
+			   height: $(document).height()
+		   })
+
+		   var $Popup = $('.popup');
+
+		   $Popup.css({
+
+				   width:"90%",
+				   left: "5%",
+				   top: ($(window).height() - $Popup.height()) / 2 + $(window).scrollTop() + 'px',
+				   display: 'block'
+
+		   })
+	  })
+	  
+	  $('.btn_close').click(function() {
+
+	  	 $(".container-fluid").show();
+	     $('#mask,.popup').css('display', 'none');
+
+	  })
+
+	  function Against(){
+	  	 var num = $("#number").val();
+	  	 var id  = $("#number").attr("data-id");
+	  	 var send = {id:id,num:num};
+	  	 $.post("/testing",send,function(msg){
+	  	 	var msg = JSON.parse(msg);
+	  	 	if(msg.errmsg == "G_ok"){
+	  	 		if(msg.errcode == 200){
+	  	 			$("#fufen").text(msg.data.balance);
+	  	 		}else{
+	  	 			$("#fufen").text(msg.data.balance);
+	  	 			$("#dui").text(msg.data.msg);
+	  	 			$("#dui").attr("action","0");
+	  	 		}
+	  	 	}
+	  	 })
+	  }
+
+	  var data = "";
+
+	  $("#dui").click(function(){
+		  	   var action = $(this).attr("action");
+		  	   var num = $("#number").val();
+		  	   var id  = $("#number").attr("data-id");
+		  	   if(action!=0){
+				dd.ready(function () {
+	               dd.device.notification.showPreloader({
+	                   text     : '订单提交中',
+	                   showIcon : true,
+	                   onSuccess: function (result) {
+	                   	sync_begin();
+	                   },
+	                   onFail   : function (err) {}
+	               })
+			     })  		  	   	
+		  	   	 var send = {id:id,num:num}
+		  	   	 $.post("/inserrecord",send,function(msg){
+		  	   	 	var msg = JSON.parse(msg);
+		  	   	 	if(msg.errmsg == "G_ok" && msg.errcode == "200"){
+						dd.ready(function () {
+                            dd.device.notification.hidePreloader({
+                                onSuccess: function (result) {},
+                                onFail   : function (err) {}
+                            })
+					     }) 		  	   	 		
+		  	   	 		window.location.href="/exchange/record?dd_nav_bgcolor=FF5E97F6";
+		  	   	 	}
+		  	   	 })
+		  	   }	  
+
+
+
+	  })
+
+	})	
+</script>
 

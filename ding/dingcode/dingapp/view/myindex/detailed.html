@@ -1,0 +1,152 @@
+<style>
+    body {
+        background-color: #f2f2f2;
+    }
+
+    .table-box {
+        line-height : 1.5;
+        height  : 40px;
+        text-align  : center;
+        padding     : 10px 16px 10px 16px;
+        border-top  : 1px solid rgba(31, 56, 88, .1);
+        font-size   : 14px;
+        background-color: #FFFFFF;
+    }
+
+
+    .card-icon svg {
+        fill: rgba(31,56,88,0.6);
+        width: 16px;
+        height: 18px;
+    }
+
+    .t-card-footer {
+        display: flex;
+        justify-content: space-between;
+        padding: 0px 12px 16px;
+        font-size: 12px;
+    }
+</style>
+
+<div class='table-box'>
+    <table align="center">
+        <tr>
+            <td id="search_date" data="{$date}"><span style="color: dodgerblue;">{$date}</span><i class="fas fa-angle-down" style="margin-left: 0.2rem;"></i></td>
+            <td id="search_state" data="{$status}" data_val="{:Mytrial_Status($status)}"><span style="color: dodgerblue;">{:Mytrial_Status($status)}</span><i class="fas fa-angle-down" style="margin-left: 0.2rem;"></i></td>
+        </tr>
+    </table>
+</div>
+
+<div class="t-group-head t-demo-title" style="height: 0.5rem"></div>
+{if condition="(!empty($list))"}
+    {volist name="list" id="val"}
+<div class="t-group-list t-BT1">
+    <div class="t-group-list-item">
+        <div class="t-field">
+            <div class="t-field-box t-field-content-box t-FBH t-FBAC">
+
+                <div class="t-field-box" style="margin: 1rem 0rem;">
+                    <div class="t-field-layout-h-label-left">
+                        {if condition="($val['code_b'] > 0)"}
+                        <i class="fas fa-award" style="font-size: 18px;margin-right: 0.3rem;  color: dodgerblue;"></i>
+                        {else /}
+                        <i class="fas fa-award" style="font-size: 18px;margin-right: 0.3rem;  color: red;"></i>
+                        {/if}
+                        <span style="font-size: 16px;font-weight: bold;">{$val.event_name}</span><br/>
+                        <span style="font-size: 16px;">初审人:{$user[$val['first_user_id']]}</span><br/>
+                        <span style="font-size: 16px;">终审人:{$user[$val['end_user_id']]}</span><br/>
+                        <span style="font-size: 16px;">奖扣人:{$user[$val['user_id']]}</span>
+                    </div>
+                </div>
+                <div class="t-FB1 t-PR"></div>
+                <div class="t-FBH t-FBAC t-field-icon">
+                    <div class="t-text-field-content">
+                        {php} if($val['code_b'] >0) { {/php}
+                            <span>+{$val['code_b']}</span>
+                        {php} }else { {/php}
+                            <span>{$val['code_b']}</span>
+                        {php} } {/php}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="t-card-footer">
+            <div class="card-footer-meta"><span style="font-size: 10px;color: #B8B8B8;margin-left:0.4rem;">{$val.create_date}</span><br/></div>
+            {php} if($val['status'] == 3){  {/php} 
+            <div class="card-footer-extra" style="font-size: 16px;color: red">{:Mytrial_Status($val.status)}</div>
+            {php} }else{ {/php}
+            <div class="card-footer-extra" style="font-size: 16px;color: dodgerblue">{:Mytrial_Status($val.status)}</div>
+            {php} } {/php}
+        </div>
+    </div>
+
+</div>
+{/volist}
+{else /}
+    <div style="line-height: 40px;border-top: none;color: #999;font-size: 14px;text-align: center">暂无数据</div>
+{/if}
+
+<script>
+    $(function () {
+        var url = '/DetailedD?dd_nav_bgcolor=FF5E97F6'
+        $('#search_date').click(function () {
+            var now      = new Date()
+            var nowYear  = now.getFullYear()
+            var nowMonth = now.getMonth() + 1
+            var nowDay   = now.getDate()
+            var time = nowYear + '-' + nowMonth + '-' + nowDay
+            var status = $('#search_state').attr("data");
+            dd.ready(function () {
+                dd.biz.util.datepicker({
+                    format   : 'yyyy-MM',
+                    value    : time, //默认显示日期
+                    onSuccess: function (result) {
+                        $('#search_date').html(result.value + ' <i class="fas fa-angle-down"></i>');
+                        $('#search_date').children().css('color', '#38adff');
+                        $('#search_date').attr("data",result.value);
+                        url = url + '&date=' + result.value + "&status="+status;
+                        openLinkRep(url)
+                    }, onFail: function (err) {
+                        // alert(JSON.stringify(err))
+                    }
+                })
+            })
+        })
+
+        $('#search_state').click(function () {
+            var state = $('#search_state').attr("data_val");
+            dd.ready(function () {
+                dd.biz.util.chosen({
+                    source     : [{
+                        key  : '全部',
+                        value: '10'
+                    }, {
+                        key  : '初审中',
+                        value: '0'
+                    }, {
+                        key  : '终审中',
+                        value: '1'
+                    },{
+                        key  : '通过',
+                        value: '2'
+                    },{
+                        key  : '驳回',
+                        value: '3'
+                    }],
+                    selectedKey: state,
+                    onSuccess  : function (result) {
+                        $('#search_state').html(result.key + ' <i class="fas fa-angle-down"></i>')
+                        $('#search_state').children().css('color', '#38adff')
+                        var date = $('#search_date').attr("data");
+                        openLinkRep(url + '&status=' + result.value + "&date="+date);
+                    },
+                    onFail     : function (err) {
+                        // alert(JSON.stringify(err))
+                    }
+                })
+            })
+        })
+        dwaith();//加载
+    })
+</script>

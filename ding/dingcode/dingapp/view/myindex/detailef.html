@@ -1,0 +1,167 @@
+<style>
+    body {
+        background-color: #f2f2f2;
+    }
+
+    .table-box {
+        line-height : 1.5;
+        height  : 40px;
+        text-align  : center;
+        padding     : 10px 16px 10px 16px;
+        border-top  : 1px solid rgba(31, 56, 88, .1);
+        font-size   : 14px;
+        background-color: #FFFFFF;
+    }
+
+
+    .card-icon svg {
+        fill: rgba(31,56,88,0.6);
+        width: 16px;
+        height: 18px;
+    }
+
+    .t-card-footer {
+        display: flex;
+        justify-content: space-between;
+        padding: 0px 12px 16px;
+        font-size: 12px;
+    }
+</style>
+<div class="t-grid t-BCf t-has-line t-grid-touchable">
+
+
+    <div class="t-grid-row t-FBH">
+        <div class="t-FBV t-FB1 t-FBJC t-FBAC t-grid-item" style="height: 6rem">
+            <div class="demo" style="text-align: center">
+                <div style="font-size: 1rem">总福分</div>
+                <div class="menu-title" style="font-size: 1.6rem;padding-top: 10px">{$balance}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="t-grid-row t-FBH">
+
+        <div class="t-FBV t-FB1 t-FBJC t-FBAC t-grid-item" style="height: 6rem">
+            <div class="demo" style="text-align: center">
+                <div style="font-size: 1rem">收入</div>
+                <div class="menu-title" style="font-size: 1.6rem;padding-top: 10px">{$income}</div>
+            </div>
+        </div>
+
+        <div class="t-FBV t-FB1 t-FBJC t-FBAC t-grid-item" style="height: 6rem">
+            <div class="demo" style="text-align: center">
+                <div style="font-size: 1rem">支出</div>
+                <div class="menu-title" style="font-size: 1.6rem;padding-top: 10px">{$expenditure}</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class='table-box'>
+    <table align="center">
+        <tr>
+            <td id="search_date" data="{$share_date}">
+                <span style="color: dodgerblue;">{$share_date}</span><i class="fas fa-angle-down" style="margin-left: 0.2rem;"></i>
+            </td>
+            <td id="search_state" data="{$status}" data_val="{:code_status($status)}">
+                <span style="color: dodgerblue;">{:code_status($status)}</span><i class="fas fa-angle-down" style="margin-left: 0.2rem;"></i>
+            </td>
+        </tr>
+    </table>
+</div>
+{if condition="(!empty($list))"}
+{volist name="list" id="val"}
+    <div class="t-group-list t-BT1">
+        <div class="t-group-list-item">
+            <div class="t-field">
+                <div class="t-field-box t-field-content-box t-FBH t-FBAC">
+
+                    <div class="t-field-box" style="margin: 1rem 0rem;">
+                        <div class="t-field-layout-h-label-left">
+                            <span style="font-size: 16px;font-weight: bold;">
+                            {php} if($val['status_code'] == 3){ {/php}
+                            收到{$user[$val['create_user_id']]}的{$val['event_name']}
+                            {php} } else if( $val['status_code'] == 2 ) { {/php}
+                            给{$user[$val['user_id']]}的{$val['event_name']}
+                            {php} } else if( $val['status_code'] == 1 ) { {/php}
+                                   {$val['event_name']}
+                            {php} }  {/php}                                
+                            </span><br/>
+                            <span style="font-size: 10px;color: #B8B8B8;margin-left:0.4rem;">{$val.create_date}</span>
+                        </div>
+                    </div>
+                    <div class="t-FB1 t-PR"></div>
+                    <div class="t-FBH t-FBAC t-field-icon">
+                        <div class="t-text-field-content">
+                            {php} if($val['status_code'] == 3){ {/php}
+                             <span>+{$val.code_a}</span>
+                            {php} } else if( $val['status_code'] == 2 ) { {/php}
+                             <span>-{$val.code_a}</span>
+                            {php} } else if( $val['status_code'] == 1 ) { {/php}
+                             <span>-{$val.code_a}</span>
+                            {php} }  {/php}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{/volist}
+{else /}
+    <div style="line-height: 40px;border-top: none;color: #999;font-size: 14px;text-align: center">暂无数据</div>
+{/if}
+<script>
+    $(function () {
+        var url = '/DetailedD?dd_nav_bgcolor=FF5E97F6&type=F'
+        $('#search_date').click(function () {
+            var now      = new Date()
+            var nowYear  = now.getFullYear()
+            var nowMonth = now.getMonth() + 1
+            var nowDay   = now.getDate()
+            var time     = nowYear + '-' + nowMonth + '-' + nowDay
+            status = $('#search_state').attr("data");
+            dd.ready(function () {
+                dd.biz.util.datepicker({
+                    format   : 'yyyy-MM',
+                    value    : time, //默认显示日期
+                    onSuccess: function (result) {
+                        openLinkRep(url + '&date=' + result.value + "&status="+status);
+                    }, onFail: function (err) {
+                        // alert(JSON.stringify(err))
+                    }
+                })
+            })
+        })
+
+        $('#search_state').click(function () {
+            var state = $('#search_state').attr("data_val");
+            var time = $('#search_date').attr("data");
+            dd.ready(function () {
+                dd.biz.util.chosen({
+                    source     : [{
+                        key  : '全部',
+                        value: '10'
+                    }, {
+                        key  : '收入',
+                        value: '1'
+                    }, {
+                        key  : '支出',
+                        value: '2'
+                    }],
+                    selectedKey: state,
+                    onSuccess  : function (result) {
+                        $('#search_state').html(result.key + ' <i class="fas fa-angle-down"></i>')
+                        $('#search_state').children().css('color', '#38adff')
+                        openLinkRep(url + '&status=' + result.value + "&date="+time);
+                    },
+                    onFail     : function (err) {
+                        // alert(JSON.stringify(err))
+                    }
+                })
+            })
+        })
+        dwaith();//加载
+    })
+</script>

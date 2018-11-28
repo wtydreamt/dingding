@@ -1,12 +1,11 @@
 <?php
 namespace app\dingapp\model;
 use think\Model;
-
+use think\Session;
 class Approvalcount extends Model
 {	  
 	  //分数月度统计记录表
 	  protected $table = 'approval_count';
-
 	  public function Approvalcount($userid,$corpid){
 	  		 //获取当前年份  获取当前月份
 	  		 $year = date("Y");
@@ -47,4 +46,28 @@ class Approvalcount extends Model
 	  	     }
 	  }
 
+	  //获取个人当月累计积分
+	  public function PersonalMonth(){
+	  		 $corpid = session::get("corpid");
+	  		 $userid = session::get($corpid."userid");
+	  		 //获取当前年份  获取当前月份
+	  		 $year = date("Y");
+	  		 $month= date("m");	  		 
+	  	     return $this->where("year",$year)->where("month",$month)->where("user_id",$userid)->where("cust_id",$corpid)
+	  	     ->field("(code_be + buckle_be) as number")->find();
+
+	  }
+
+	  //获取当日积分
+	  public function GetToday(){
+	  	     $corpid = session::get("corpid");
+	  	     $userid = session::get($corpid."userid");
+	  	     $date = date("Y-m-d");
+	  		 $res  = model("Approvale")->alias("e")->join("approval_derive d","e.id = d.a_id")->where("e.corp_id",$corpid)
+	  		 ->where("d.user_id",$userid)->where("d.cust_id",$corpid)
+	  		 ->where("e.is_likes",0)->where("e.date",$date)
+	  		 ->where("d.status",2)
+	  		 ->field("sum(code_b) as day_code")->find();
+	  		 return $res;
+	  }
 }

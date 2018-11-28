@@ -84,7 +84,7 @@
 				<p class="demo2-t-list-title-content t-omit" >{$val.desc}</p>
 			</div>
 			<div class="t-button t-button-minor t-button-inline t-button-size-small">
-				<span class="demo2-t-list-time links" data-url="/exchange/info?dd_nav_bgcolor=FF5E97F6&id={$val.id}">立即兑换</span>
+				<span class="demo2-t-list-time links" style="cursor:pointer" data-url="/exchange/info?dd_nav_bgcolor=FF5E97F6&id={$val.id}">立即兑换</span>
 			</div>
 		</div>	
 	</div>
@@ -105,6 +105,82 @@
                     </svg><div style="position:absolute;top:0;left:0;width:100%;height:100%;" class="t-icon-mask" >
                     </div></div></div><div class="loading-text">已经全部加载喽！</div></div>
 </div>
-<script src="/static/app/dingcode/exchange.js"></script>
+<script>
+    $(window).scroll(function() {
+
+    var scrollTop = $(this).scrollTop();
+    var scrollHeight = $(document).height();
+    var windowHeight = $(this).height();
+
+    if (scrollTop + windowHeight == scrollHeight) {
+            
+            var len  = $("#goods").find(".demo2-t-list-wrap").length;
+            var page = Math.ceil(len/3);
+            var str  = "";
+            $.ajax({
+                url: '/exchange',
+                type:"GET",
+                data: {"page":page,"is_ajax":true},
+                timeout: 30000,
+                success: function (data, status, xhr) {
+                      $("#buckle_loading_ok").show();
+                      if(status == "success"){
+                         var objjson = $.parseJSON( data );
+                         if(objjson.errmsg == "ok" && objjson.errcode == "D_200"){
+                            var goods = objjson.data;
+                            for(var val in goods){
+                                str = str+  '<div class="demo2-t-list-wrap" style="height: 100%;">'+
+                                            '<div class="t-FBH t-FBAC" style="height: 100%;">'+
+                                                '<div class="t-FBH t-FB1" style="height: 100%;">'+
+                                                    '<div class="demo2-t-list-img-wrap" style="width: 100%;">'+
+                                                        '<img src="https://img.alicdn.com/tps/TB1mKYuJFXXXXbFXpXXXXXXXXXX-375-140.png"  class="demo2-t-list-img" >'+
+                                                    '</div>'+
+                                                '</div>'+
+                                            '</div>'+
+                                            '<div class="t-FBH demo3-t-list-title">'+
+                                                '<div class="t-FB1" >'+
+                                                    '<p class="demo2-t-list-title-content t-omit titles" >'+goods[val].title+'</p>'+
+                                                '</div>'+
+                                                '<div class="">'+
+                                                    '<span class="demo2-t-list-time" style="color:red" >'+goods[val].price+'</span>福分'+
+                                                '</div>'+
+                                            '</div>'+
+                                            '<div class="t-FBH demo3-t-list-title">'+
+                                                '<div class="t-FB1" >'+
+                                                    '<p class="demo2-t-list-title-content t-omit" >'+goods[val].desc+'</p>'+
+                                                '</div>'+
+                                                '<div class="t-button t-button-minor t-button-inline t-button-size-small">'+
+                                                    '<span class="demo2-t-list-time links" data-url="/exchange/info?dd_nav_bgcolor=FF5E97F6&id='+goods[val].id+'">立即兑换</span>'+
+                                                '</div>'+
+                                            '</div>'+ 
+                                        '</div>';
+
+                            }
+                            $("#buckle_loading_ok").hide();
+                            $("#goods").append(str);
+                         }else if(objjson.errmsg == "ok" && objjson.errcode == "D_400"){
+                            $("#buckle_loading_ok").hide();
+                            $("#buckle_loading_no").show();
+                         }
+
+                      }
+
+                },
+                error: function (xhr, errorType, error) {
+
+                }
+            });  
+
+    }
+
+});
+$(function(){
+    $(document).on("click",".links",function(){
+        var url = $(this).attr("data-url");
+        window.location.href=url;
+    })
+})
+    
+</script>
 
 

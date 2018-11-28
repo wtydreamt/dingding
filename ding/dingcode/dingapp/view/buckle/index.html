@@ -363,4 +363,472 @@
 </script>
 <script type="text/javascript" src="/static/dingding/config.js"></script>
 <script type="text/javascript" src="/static/logger.js"></script>
-<script type="text/javascript" src="/static/dingding/buckle.js"></script>
+<script>
+
+dd.ready(function() {
+
+        $('.apply-user').on('click', function() {
+                $(".add_my_name").css({"background-color":"#e8f4ff","color":"#439fff"});
+                $(".add_my_name").val("添加本人");
+                $(".add_my_name").attr("id","0");
+                dd.biz.contact.complexPicker({
+                    title                : '奖扣对象',       //标题
+                    corpId               : _config.corpid,  //企业的corpId
+                    multiple             : true,            //是否多选
+                    limitTips            : '最多选择20人',   //超过限定人数返回提示
+                    maxUsers             : 20,              //最大可选人数
+                    pickedUsers          : [],              //已选用户
+                    pickedDepartments    : [],              //已选部门
+                    disabledUsers        : [],              //不可选用户
+                    disabledDepartments  : [],              //不可选部门
+                    requiredUsers        : [],              //必选用户（不可取消选中状态）
+                    requiredDepartments  : [],              //必选部门（不可取消选中状态）
+                    appId                : _config.agentid, //微应用的Id
+                    permissionType       : 'GLOBAL',        //选人权限，目前只有GLOBAL这个参数
+                    responseUserOnly     : true,            //返回人，或者返回人和部门
+                    startWithDepartmentId: 0,               // 0表示从企业最上层开始
+                    onSuccess            : function (result) {
+                        $('input[name=\'apply_user_count\']').val(result.selectedCount)
+                        if (result.selectedCount <= 1) {
+                            $('input[name=\'apply_user\']').val(result.users[0].name)
+                            $('input[name=\'apply_user_id\']').val(JSON.stringify(result.users))
+                        } else {
+                            $('input[name=\'apply_user\']').val(result.users[0].name + '等' + result.selectedCount + '人')
+                            $('input[name=\'apply_user_id\']').val(JSON.stringify(result.users))
+                        }
+                    },
+                    onFail               : function (err) {
+                        alert('err: ' + JSON.stringify(err))
+                    }
+                })
+        })
+
+        $('.first_user').click(function () {
+                dd.biz.contact.complexPicker({
+                    title                : '初审人',          //标题
+                    corpId               : _config.corpid,   //企业的corpId
+                    multiple             : false,            //是否多选
+                    limitTips            : '最多选择1人',     //超过限定人数返回提示
+                    maxUsers             : 1,                //最大可选人数
+                    pickedUsers          : [],               //已选用户
+                    pickedDepartments    : [],               //已选部门
+                    disabledUsers        : [],               //不可选用户
+                    disabledDepartments  : [],               //不可选部门
+                    requiredUsers        : [],               //必选用户（不可取消选中状态）
+                    requiredDepartments  : [],               //必选部门（不可取消选中状态）
+                    appId                : _config.agentid,  //微应用的Id
+                    permissionType       : 'GLOBAL',         //选人权限，目前只有GLOBAL这个参数
+                    responseUserOnly     : true,             //返回人，或者返回人和部门
+                    startWithDepartmentId: 0,                // 0表示从企业最上层开始
+                    onSuccess            : function (result) {
+                        $('input[name=\'first_user\']').val(result.users[0].name)
+                        $('input[name=\'first_user_id\']').val(result.users[0].emplId)
+                    },
+                    onFail               : function (err) {
+                        alert('err: ' + JSON.stringify(err))
+                    }
+                })
+        })
+
+        $('.end_user').click(function () {
+                dd.biz.contact.complexPicker({
+                    title                : '终审人',         //标题
+                    corpId               : _config.corpid,  //企业的corpId
+                    multiple             : false,           //是否多选
+                    limitTips            : '最多选择1人',    //超过限定人数返回提示
+                    maxUsers             : 1,               //最大可选人数
+                    pickedUsers          : [],              //已选用户
+                    pickedDepartments    : [],              //已选部门
+                    disabledUsers        : [],              //不可选用户
+                    disabledDepartments  : [],              //不可选部门
+                    requiredUsers        : [],              //必选用户（不可取消选中状态）
+                    requiredDepartments  : [],              //必选部门（不可取消选中状态）
+                    appId                : _config.agentid, //微应用的Id
+                    permissionType       : 'GLOBAL',        //选人权限，目前只有GLOBAL这个参数
+                    responseUserOnly     : true,            //返回人，或者返回人和部门
+                    startWithDepartmentId: 0,               // 0表示从企业最上层开始
+                    onSuccess            : function (result) {
+                        $('input[name=\'end_user\']').val(result.users[0].name)
+                        $('input[name=\'end_user_id\']').val(result.users[0].emplId)
+                    },
+                    onFail               : function (err) {
+                        alert('err: ' + JSON.stringify(err))
+                    }
+                })
+        })  
+
+        $(".add_my_name").click(function()
+        {
+            var is_add = $(this).attr("id");
+            if(is_add == 0)
+            {
+                $('input[name=\'apply_user_count\']').val(1);
+                $('input[name=\'apply_user\']').val(user.name);
+                var user_list = '['+'{'+"\"name\":\""+user.name+"\",\"emplId\":\""+user.dd_id+'\"}'+']';
+                $('input[name=\'apply_user_id\']').val(user_list);
+                $(this).css({"background-color":"#439fff","color":"white"});
+                $(this).val("已添加本人");
+                $(this).attr("id","1");
+            }else if(is_add == 1)
+            {
+                $('input[name=\'apply_user_count\']').val("");
+                $('input[name=\'apply_user\']').val("");
+                $('input[name=\'apply_user_id\']').val("");
+                $(this).css({"background-color":"#e8f4ff","color":"#439fff"});
+                $(this).val("添加本人");
+                $(this).attr("id","0");
+            }
+        })
+
+        /*C分开关*/
+        $("#is_begin").click(function()
+        {
+            var is_has = $(this).hasClass("active");
+            if(is_has == true)
+            {
+                $(this).removeClass("active");
+                $(".apply-code2").css("display","none");
+            }else
+            {
+                $(this).addClass("active");
+                $(".apply-code2").css("display","block");
+            }
+        })     
+
+        //奖扣时间
+        $('.apply-date').click(function () {
+            var now      = new Date()
+            var nowYear  = now.getFullYear()
+            var nowMonth = now.getMonth() + 1
+            var nowDay   = now.getDate()
+            var time     = nowYear + '-' + nowMonth + '-' + nowDay
+            dd.ready(function () {
+                dd.biz.util.datepicker({
+                    format   : 'yyyy-MM-dd',
+                    value    : time, // 默认显示日期
+                    onSuccess: function (result) {
+                        $('input[name=\'apply_date\']').val(result.value)
+                    }, onFail: function (err) {
+                        alert(JSON.stringify(err))
+                    }
+                })
+            })
+        })
+
+        //奖扣类型
+        $('.code_jklx').click(function () {
+            var code_jklx = $("input[name='code_jklx']").val();
+            dd.ready(function () {
+                dd.biz.util.chosen({
+                    source:[{
+                        key: '奖分', //显示文本
+                        value: '0' //值，
+                    },{
+                        key: '扣分',
+                        value: '1'
+                    }],
+                    selectedKey:code_jklx , // 默认选中的key
+                    onSuccess : function(result) {
+                        $('input[name=\'code_jklx\']').val(result.key)
+                        $('input[name=\'is_deduct\']').val(result.value)
+                    },
+                    onFail : function(err) {}
+                })
+            })
+        })
+
+        //显示一级事件
+        $('.thing').click(function () {
+            $('#thingsModal').modal('show')
+        })
+        //二级事件库
+        $(document).on('click', '.thing-first', function () {
+            var name = $(this).html();
+            var id   = $(this).attr("data");
+            $('#event-temporary').hide();
+            $('input[name=\'thing_first_name\']').val(name)
+            $('.thing-second-title').html('二级事件库')
+            $('.thing-first-title-active').hide()
+            $('.thing-second-title-active').show()
+            $('.thing-first-title').removeClass('t-tab-tab-active')
+            $('.thing-second-title').addClass('t-tab-tab-active')
+
+            $('#event-search').css('display', 'block')
+
+            var getRequest = {
+                url     : '/get_events',
+                type    : 'POST',
+                data    : {id: id},
+                dataType: 'json',
+                success : function (response) {
+                    
+                    if (response.errcode == 0) {
+                        var ht = ''
+                        var event_data = response.data;
+                        for(var key in event_data){
+                            ht = ht + '<div class="t-group-list-item">\n' +
+                                      '<div class="t-LH44 thing-second" data="'+event_data[key].id+'">' + event_data[key].name +'</div>\n' +
+                                      '</div>'                            
+                        }
+                        $('.thing-desc').html(ht)
+                        $('input[name=\'thing_first_name_id\']').val(id)
+                    } else {
+                        alert(JSON.stringify(response))
+                    }
+                },
+                error   : function (err) {
+                    alert(JSON.stringify(err))
+                }
+            }
+            $.ajax(getRequest)
+        })
+
+        $('.thing-first-title').click(function () {
+            $('#event-temporary').hide();
+            $('.thing-second-title').html('')
+            $('.thing-first-title-active').show()
+            $('.thing-second-title-active').hide()
+            $('.thing-first-title').addClass('t-tab-tab-active')
+            $('.thing-second-title').removeClass('t-tab-tab-active')
+            $('#event-temporary').hide();
+            $('#event-search').css('display', 'none')
+
+            var getRequest = {
+                url     : '/get_events',
+                type    : 'GET',
+                data    : {id: "0"},
+                dataType: 'json',
+                success : function (response) {
+                    if (response.errcode == 0) {
+                        var ht = ''
+                        var event_data = response.data;
+                        for(var key in event_data){
+                            ht = ht + '<div class="t-group-list-item">\n' +
+                                      '<div class="t-LH44 thing-first" data="'+ event_data[key].id +'">' + event_data[key].name +'</div>\n' +
+                                      '</div>'                            
+                        }
+                        $('.thing-desc').html(ht)
+                    } else {
+                        alert(JSON.stringify(response))
+                    }
+                },
+                error   : function (err) {
+                    alert(JSON.stringify(err))
+                }
+            }
+            $.ajax(getRequest)
+        })
+
+        $('#event-search-btn').click(function () {
+            var searchText = $('#event-search-input').val();
+            var thing_first_name_id = $('input[name=\'thing_first_name_id\']').val();
+            var getRequest = {
+                url     : '/get_events',
+                type    : 'POST',
+                data    : {id: thing_first_name_id, name: searchText},
+                dataType: 'json',
+                success : function (response) {
+                    if (response.errcode == 0) {
+                        if ($.isEmptyObject(response.data)) {
+                            $('.thing-desc').html('')
+                            $('#event-temporary').css('display', 'block')
+                        } else {
+                            var ht = ''
+                            var event_data = response.data;
+                            for(var key in event_data){
+                                ht = ht + '<div class="t-group-list-item">\n' +
+                                          '<div class="t-LH44 thing-second" data="'+event_data[key].id+'">' + event_data[key].name +'</div>\n' +
+                                          '</div>'                            
+                            }
+                            $('.thing-desc').html(ht)
+                            $('#event-temporary').css('display', 'none')
+                        }
+                    } else {
+                        alert(JSON.stringify(response))
+                    }
+                },
+                error   : function (err) {
+                    alert(JSON.stringify(err))
+                }
+            }
+            $.ajax(getRequest)
+        })
+        $('.thing-desc').on('click', '.thing-second', function () {
+            var name = $(this).html();
+            var id   = $(this).attr("data");
+            var getRequest = {
+                url     : '/events_info',
+                type    : 'POST',
+                data    : {id: id},
+                dataType: 'json',
+                success : function (response) {
+
+                        if (response.errcode == 0) {
+
+                            var events_info = response.data;
+
+                            if (events_info.is_deduct == 1) {
+
+                                $('input[name=\'code_jklx\']').val('扣分')
+                                $('input[name=\'is_deduct\']').val('1')
+
+                            } else {
+
+                                $('input[name=\'code_jklx\']').val('奖分')
+                                $('input[name=\'is_deduct\']').val('0')
+
+                            }
+                            
+                            $('input[name=\'apply_code\']').val(Math.abs(events_info.min_b));
+                            $('#code_tjfs').text(events_info.min_b + ' - ' + events_info.max_b);
+                            $('input[name=\'apply_code_b\']').val(events_info.min_b);   //获取事件分数D
+                            $('input[name=\'apply_code_c\']').val(events_info.min_b);   //获取事件分数C
+                        }else{
+
+                            alert(JSON.stringify(response));
+
+                        }
+                },
+                error   : function (err) {
+                   alert(JSON.stringify(err))
+                }
+            }
+            $.ajax(getRequest)
+
+            $('input[name=\'thing\']').val(name)
+            $('#thingsModal').modal('hide')
+        })
+
+        /*临时事件处理*/
+        $('#event-temporary').click(function () {
+            var name = $('#event-search-input').val()
+            $('input[name=\'thing\']').val(name)
+            $('#thingsModal').modal('hide')
+        })
+
+        //获取数据
+        $('#subbtn').click(function () {
+
+            var is_c  = $("#is_begin").hasClass("active");
+            var first = $('input[name=\'thing_first_name\']').val();      //获取一级事件信息
+            var thing = $('input[name=\'thing\']').val();                 //获取二级事件信息
+            if(!first || !thing)
+            {
+                    dtoast('error', '事件信息不能为空');
+                    return false;
+            }            
+            var desc  = $('#desc').val();                                 //获取事件描述
+
+            var apply_user = $('input[name=\'apply_user\']').val();       //获取奖扣对象
+            var userlist   = $('input[name=\'apply_user_id\']').val();    //奖扣对象列表
+            if(!apply_user)
+            {
+                    dtoast('error', '请选择奖扣对象');
+                    return false;
+            }
+            var apply_code_b = $('input[name=\'apply_code_b\']').val();   //获取事件分数D
+            var apply_code_c = $('input[name=\'apply_code_c\']').val();   //获取事件分数C
+            
+            var apply_date = $('input[name=\'apply_date\']').val();       //获取事件提交日期
+
+            var first_user = $('input[name=\'first_user\']').val();       //获取事件初审人
+            var end_user   = $('input[name=\'end_user\']').val();         //获取事件终审人
+            if(!first_user)
+            {
+                    dtoast('error', '请选择初审人');
+                    return false;
+            }
+            if(!end_user)
+            {
+                    dtoast('error', '请选择终审人');
+                    return false;
+            } 
+            if(end_user == first_user)
+            {
+                    dtoast('error', '初审人和终审人不能为一人');
+                    return false;
+            }                        
+            var first_user_id = $('input[name=\'first_user_id\']').val(); 
+            var end_user_id   = $('input[name=\'end_user_id\']').val();
+           
+            var is_deduct  = $('input[name=\'is_deduct\']').val();        //获取事件奖扣类型
+            //检测c分是否提交
+            var is_has = $(this).hasClass("active");
+            if(is_has == true)
+            {
+                if(apply_code_b == "0"){
+                    dtoast('error', 'D分 不能为0');
+                    return false;
+                }
+                if(apply_code_c == "0"){
+                    dtoast('error', 'C分 不能为0');
+                    return false;
+                }                
+            }
+            else
+            {
+                if(apply_code_b == "0"){
+                    dtoast('error', 'D分 不能为0');
+                    return false;
+                }
+            }
+
+            var send = {first:first,thing:thing,desc:desc,userlist:userlist,apply_code_b:apply_code_b,apply_date:apply_date,first_user:first_user_id,end_user:end_user_id,is_deduct:is_deduct}
+            var senddata={event_name:first+':'+thing,event_user_name:userlist,apply_code_b:apply_code_b,first_user_name:first_user,end_user_name:end_user,user_object:first_user_id,is_deduct:is_deduct}
+
+            if(is_c){
+               send.is_c = 1;
+               send.apply_code_c = apply_code_c;
+               senddata.is_c = 1;
+               senddata.apply_code_c = apply_code_c;
+            }else{
+               send.is_c = 0;
+               senddata.is_c = 0;
+            }
+
+            dd.ready(function() {
+                dd.device.notification.showPreloader({
+                    text     : '事件提交中',
+                    showIcon : true,
+                    onSuccess: function (result) {
+                        sync_begin();
+                    },
+                    onFail   : function (err) {}
+                }) 
+            }) 
+          
+            $.post("/BuckleInsert",send,function(data,status,xhr){
+                  var data = $.parseJSON( data );
+                  if(data.errmsg == "OK"){
+                    $.post("/Sendmsg",senddata,function(data,status,xhr){
+                        var res = $.parseJSON( data );
+
+                        if(res.errcode == "0"){
+                            dd.ready(function() {
+                                dd.device.notification.hidePreloader({
+                                    onSuccess: function (result) {},
+                                    onFail   : function (err) {}
+                                })
+                            })                            
+                            window.location.href="/mytrial?dd_nav_bgcolor=FF5E97F6";
+                        }
+                    });                     
+                  }
+            });
+
+        })
+
+    function dtoast (icon, text) {
+
+            dd.device.notification.toast({
+                icon     : icon,          //icon样式，有success和error，默认为空 0.0.2
+                text     : text,          //提示信息
+                duration : 2,             //显示持续时间，单位秒，默认按系统规范[android只有两种(<=2s >2s)]
+                delay    : 0,             //延迟显示，单位秒，默认0
+                onSuccess: function (result) {},
+                onFail   : function (err) {}
+            })
+
+    }    
+})    
+</script>

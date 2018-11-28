@@ -1,0 +1,193 @@
+<style>
+    .avatar {
+        width            : 85px;
+        height           : 85px;
+        line-height      : 90px;
+        font-size        : 22px;
+        /*position         : relative;*/
+        background-color : white;
+        color: black;
+        margin: auto;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+
+    body {
+        background-color: #f2f2f2;
+    }
+
+    .table-box {
+        line-height : 1.5;
+        height  : 40px;
+        text-align  : center;
+        padding     : 10px 16px 10px 16px;
+        border-top  : 1px solid rgba(31, 56, 88, .1);
+        font-size   : 14px;
+        background-color: #FFFFFF;
+    }
+
+    .t-demo-title {
+        font-size : 16px;
+        height : 30px;
+        line-height : 30px;
+        padding-left : 10px;
+
+    }
+
+    .demo-t-list-wrap {
+        padding : 10px;
+    }
+
+    .demo-t-list-wrap-single {
+        display : block;
+        padding : 8px 10px;
+    }
+
+    .demo-t-list-img {
+        width : 28px;
+        height : 28px;
+        border-radius : 50%;
+        margin-right : 10px;
+        margin-left : 5px;
+    }
+
+    .demo-t-list-text-content {
+        margin-right : 10px;
+    }
+
+    .demo-t-list-text-content-single {
+        line-height : 28px;
+    }
+
+    .demo-t-list-title {
+        /*color : #222;*/
+        font-size : 16px;
+        line-height : 22px;
+        padding-bottom : 4px;
+    }
+
+    .demo-t-list-title-single {
+        font-size : 17px;
+        /*color : #222;*/
+        padding-bottom : 0;
+    }
+
+    .demo-t-list-text {
+        color : #999;
+        font-size : 12px;
+        line-height : 18px;
+        padding-bottom : 4px;
+    }
+
+    .fas{
+        margin-top: 3px;
+        margin-right:1rem;
+        font-size: 20px;
+    }
+</style>
+
+<div class='table-box'>
+    <table align="center">
+        <tr>
+             {php} if ($date) { {/php}
+            <td id="search_date" style="color: #38adff">{$date} <i class="fas fa-angle-down"></i></td>
+            {php}  } else { {/php}
+             <td id="search_date">时间 <i class="fas fa-angle-down"></i></td>
+            {php}  }  {/php}
+        </tr>
+    </table>
+</div>
+
+<div class="t-group-list line-indent-left-15px">
+    <div class="t-group-head t-demo-title">我的排名</div>
+
+    <div class="t-group-list-item">
+        <div class="demo-t-list-wrap-single">
+            <div class="t-FBH t-FBAC">
+                <div class="t-FBH t-FB1">
+                   <p style="font-size: 18px; font-weight: bold; padding-top: 6px;">
+                       {$tname}
+                       第{$rank}名</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="t-group-list line-indent-left-15px">
+    <div class="t-group-head t-demo-title">排名详情</div>
+
+    {volist name="list" id="val"}
+        {volist name="val" id="v"}
+        <div class="t-group-list-item" {if condition="($v['dd_id'] == get_userid())"} style="background-color: #1E9FFF; color: #FFF;"{/if}>
+            <div class="demo-t-list-wrap-single">
+                <div class="t-FBH t-FBAC">
+                    <div class="t-FBH t-FB1">
+                       <div style="width: 44px">
+                           <p style="font-size: 18px; font-weight: bold; padding-top: 6px;">
+                               {php} if ($v['sort'] == 1) { {/php}
+                                   <img src="/static/app/img/rank_jin.png" alt="" style="width: 14px">
+                               {php}  } else if ($v['sort'] == 2) { {/php}
+                                   <img src="/static/app/img/rank_yin.png" alt="" style="width: 14px">
+                               {php}  } else if ($v['sort'] == 3) { {/php}
+                                   <img src="/static/app/img/rank_tong.png" alt="" style="width: 14px">
+                               {php}  } else { {/php}
+                                        {$v['sort']}
+                               {php} } {/php}
+                           </p>
+    <!--                        <img src="https://img.alicdn.com/tps/TB1eoLXJFXXXXaFXVXXXXXXXXXX-60-60.png" class="demo-t-list-img">-->
+                        </div>
+                        <div class="t-FB1 demo-t-list-text-content-single">
+                            <p class="demo-t-list-title-single omit">
+                                {$v.name}
+
+                                <span style="color: #D2D2D2">
+                                ({:implode($v['dingding_office_id'],",")})
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display:inline-block;line-height:0;" class="t-icon t-svg demo-t-list-arrow">{$v.balance}</div>
+                </div>
+            </div>
+        </div>
+        {/volist}
+    {/volist}
+
+</div>
+<script type="text/javascript">
+    var  where ={$where};
+</script>
+<script>
+    $(function () {
+        $('#search_date').click(function () {
+            var now      = new Date()
+            var nowYear  = now.getFullYear()
+            var nowMonth = now.getMonth() + 1
+            var nowDay   = now.getDate()
+            var time = nowYear + '-' + nowMonth + '-' + nowDay
+
+            dd.ready(function () {
+                dd.biz.util.datepicker({
+                    format   : 'yyyy-MM-dd',
+                    value    : time, //默认显示日期
+                    onSuccess: function (result) {
+                        $('#search_date').html(result.value + ' <i class="fas fa-angle-down"></i>')
+                        $('#search_date').children().css('color', '#38adff')
+                        if(where.type == "all"){
+                            window.location.href="/rank?dd_nav_bgcolor=FF5E97F6&type=all&office_id=0&date="+result.value
+                        }else{
+                            window.location.href="/rank?dd_nav_bgcolor=FF5E97F6&type=all&office_id="+where.office_id+"&date="+result.value
+                        }
+                        
+                    }, onFail: function (err) {
+                        alert(JSON.stringify(err))
+                    }
+                })
+            })
+        })
+    })
+</script>

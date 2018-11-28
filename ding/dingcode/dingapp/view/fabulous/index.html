@@ -99,5 +99,96 @@
 </script>
 <script type="text/javascript" src="/static/dingding/config.js"></script>
 <script type="text/javascript" src="/static/logger.js"></script>
-<script type="text/javascript" src="/static/dingding/Fabulous.js"></script>
+<script>
+dd.ready(function() {
+    $('.apply-user').on('click', function() {
+        dd.biz.contact.complexPicker({
+            title:"被赞赏的人",            //标题
+            corpId:_config.corpId,              //企业的corpId
+            multiple:false,            //是否多选
+            maxUsers:1000,            //最大可选人数
+            appId:_config.agentid,              //微应用的Id
+            responseUserOnly:false,        //返回人，或者返回人和部门
+            startWithDepartmentId:0 ,   // 0表示从企业最上层开始，IOS不支持该字段
+            onSuccess: function(result) {
+                var user = result.users;
+                $('input[name=\'apply_user\']').val(user[0].name)
+                $('input[name=\'apply_user_id\']').val(user[0].emplId)              
+            },
+           onFail : function(err) {
+           }
+        })
+    })
+
+    $('.label').click(function () {
+        $('.label').css('background-color', 'white')
+        $('.label').css('color', '#38adff')
+        var obj         = $(this)
+        var check_label = obj.val()
+        $('#label_hidden').val(check_label)
+        obj.css('background-color', '#38adff')
+        obj.css('color', '#fff')
+    })
+        $('#submit').click(function () {
+            var apply_user = $('input[name=\'apply_user\']').val();
+            var code       = $('input[name=\'code\']').val();
+            var label      = $('input[name=\'label\']').val();
+            var desc       = $('#desc').val();
+            var apply_user_id = $('input[name=\'apply_user_id\']').val();
+            if (apply_user_id == user_id.userid) {
+                 dtoast('error', '自己不能给自己点赞')
+            }else if(code < user_id.FabulousSet){
+                 dtoast('error', '赞赏分不得低于最低限额'+user_id.FabulousSet+"福分");
+            }else if(user_id.balance == 0 || code > user_id.balance){
+                 dtoast('error', '福分不足')
+            }else{
+                if (apply_user == '') {
+                    $('.apply_user0').css('display', 'inline-block')
+                } else {
+                    $('.apply_user0').css('display', 'none')
+                }
+
+                if (code == '') {
+                    $('.code-err0').css('display', 'inline-block')
+                } else {
+                    $('.code-err0').css('display', 'none')
+                }
+
+                if (label == '') {
+                    $('.label-err0').css('display', 'inline-block')
+                } else {
+                    $('.label-err0').css('display', 'none')
+                }
+
+                if (desc == '') {
+                    $('.desc-err0').css('display', 'inline-block')
+                    $('.desc-err1').css('display', 'flex')
+                } else {
+                    $('.desc-err0').css('display', 'none')
+                    $('.desc-err1').css('display', 'none')
+                }
+
+                if (apply_user == '' || code == '' || label == '' || desc == '') {
+                    dtoast('error', '输入有误');
+                    return
+                }
+
+                $('form').submit()
+           }
+
+        })
+    function dtoast (icon, text) {
+        dd.ready(function () {
+            dd.device.notification.toast({
+                icon     : icon, //icon样式，有success和error，默认为空 0.0.2
+                text     : text, //提示信息
+                duration : 2, //显示持续时间，单位秒，默认按系统规范[android只有两种(<=2s >2s)]
+                delay    : 0, //延迟显示，单位秒，默认0
+                onSuccess: function (result) {},
+                onFail   : function (err) {}
+            })
+        })
+    }    
+})    
+</script>
 

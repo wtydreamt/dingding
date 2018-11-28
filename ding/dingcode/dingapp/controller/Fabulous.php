@@ -69,15 +69,17 @@ class Fabulous extends Common
            $method  = $request->method();
            $FabulousSet = model("Cyset")->get_sys_set();
            if($method == "GET"){
+
               $id      = intval($request->param("id"));
               $like_id = intval($request->param("like_id"));
               $user    = model("Approvald")->alias("d")
                 ->join("sys_user u","d.user_id = u.dd_id")
-                ->where("d.id",$id)->where("d.cust_id",$this->corpid)->where("u.cust_id",$this->corpid)->field("name,user_id")->find();
+                ->where("d.id",$id)->where("d.cust_id",$this->corpid)->where("u.cust_id",$this->corpid)->field("name,user_id,balance")->find();
 
-              return $this->fetch("follow",['title'=>'悦积分','like_name_id'=>$user['user_id'],'like_id'=>$like_id,"likes_quota_c"=>$FabulousSet['likes_quota_c'],"name"=>$user['name']]); 
+              return $this->fetch("follow",['title'=>'悦积分','like_name_id'=>$user['user_id'],'like_id'=>$like_id,"likes_quota_c"=>$FabulousSet['likes_quota_c'],"name"=>$user['name'],"balance"=>$user['balance']*100]); 
 
            }else if($method == "POST"){
+
               $data = $request->param();
               $datetime = date("Y-m-d H:i:s");
               $app_arr = [];
@@ -99,6 +101,7 @@ class Fabulous extends Common
               $res_app=model("Fabulous")->approval($app_arr,$appevent_arr,$data['like_name_id'],$FabulousSet['likes_quota_c']);
               $url = "/home?dd_nav_bgcolor=FF5E97F6";
               header("Location:$url");
+
            }
 
 

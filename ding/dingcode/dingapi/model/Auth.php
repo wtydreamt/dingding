@@ -20,5 +20,13 @@ class Auth extends Model
 		   $data=Db::connect($db)->query($sql);
 
 		   return $data;
+	}
+
+	public function sync($biz_id,$id){
+
+		   $sql = "select biz_data,corp_id,biz_type,biz_id from open_sync_biz_data_medium where id = '".$id."' AND subscribe_id = '".$biz_id."' ";
+		   $db  =  config::get("ding");
+		   $data=Db::connect($db)->query($sql);	
+		   return $data['0'];
 	}	
 }

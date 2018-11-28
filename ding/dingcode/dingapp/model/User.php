@@ -10,13 +10,11 @@ class User extends Model
 	  protected $table = 'sys_user';
 
 	  public function UserRegister($userinfo){
-
 	  	     $data = json_decode($userinfo,true);
 
-	  	     $cust_id = session::get("corpid");
+	  	     $cust_id = "dingc74412f7259da97f35c2f4657eb6378f";
 
 	  	     if($data['errmsg']  == "ok"){
-
 	  	     	$res = Db::table("sys_user")->where("cust_id", $cust_id)->where("dd_id", $data['userid'])->field('id,name')->find();
 	  	     	if($res){
 
@@ -26,25 +24,35 @@ class User extends Model
 	  	     	}else{
 
 	  	     		$user = array();
-	  	     		$user['name']    = $data['name'];
-	  	     		$user['dd_id']   = $data['userid'];
-	  	     		$user['cust_id'] = $cust_id;
+	  	     		$user['name']        = $data['name'];
+	  	     		$user['position']    = $data['position'];
+	  	     		$user['dd_id']       = $data['userid'];
+	  	     		$user['cust_id']     = $cust_id;
 	  	     		$user['dd_avatar']   = $data['avatar'];
 	  	     		$user['office_id']   = $data['department']['0'];
 	  	     		$user['is_dd_admin'] = ($data['isAdmin'])?"1":0;
 	  	     		$user['create_date'] = date("Y-m-d H:i:s");
 	  	     		$user['dingding_office_id'] = implode($data['department'],",");
+
+	  	     		$isLeaderInDepts = trim($data['isLeaderInDepts'],"{");
+	  	     		$isLeaderInDepts = trim($isLeaderInDepts,"}");
+	  	     		$isLeaderInDepts = explode(",",$isLeaderInDepts);
+	  	     		$isLeader = [];
+	  	     		$temp = [];
+	  	     		foreach($isLeaderInDepts as $key=>$val){
+	  	     				$temp = explode(":",$val);
+	  	     				if($temp[1] !="false"){
+	  	     				   $isLeader[$key] = $temp[0];
+	  	     				}
+	  	     		}
+	  	     		
+	  	     		$user['is_dd_leader'] = implode($isLeader,",");
 	  	     		$res_u=Db::table("sys_user")->insert($user);
-
 	  	     		if($res_u){
-
 	  	     			session::set($cust_id."userid",$data['userid']);
 	  	     			return ReturnJosn("ok","D_200","注册成功");
-	  	     			
 	  	     		}else{
-
 	  	     			return ReturnJosn("ok","D_400","注册失败");
-
 	  	     		}
 
 	  	     	}
@@ -78,13 +86,18 @@ class User extends Model
 	  
 	  public function getframework(){
 	  	     $corpid=session::get("corpid");
-	  	     $user=Db::table("sys_user")->where("cust_id",$corpid)->field("name,office_id")->select();
+	  	     $user=Db::table("sys_user")->alias("u")
+	  	     ->join("dingding_office o","u.office_id = o.dingding_id")
+	  	     ->where("o.cust_id",$corpid)
+	  	     ->where("u.cust_id",$corpid)->field("u.name,u.office_id,o.name as oname,position")->select();
+	  	     
 	  	     $usertemp = [];
 	  	     foreach($user as $key=>$val){
-	  	            $usertemp[$val['office_id']][$key] = $val;
+	  	            $usertemp[$val['office_id']]["name"] = $val['oname'];
+	  	            $usertemp[$val['office_id']]["dingding_id"] = $val['office_id'];
+	  	            $usertemp[$val['office_id']]["data"][$key] = $val;
 	  	     }
-	  	     $office = Db::table("dingding_office")->where("cust_id",$corpid)->field("name,parent_id,dingding_id")->select();
-	  	     return array("user"=>$usertemp,"office"=>$office);
+	  	     return $usertemp;
 
 	  }
 
@@ -117,8 +130,20 @@ class User extends Model
 	  		 return $user_temp;
 	  }
 
+	  //获取用户信息
 	  public function getUserName($userid){
 	  	     $corpid=session::get("corpid");
-	  	     return model("User")->where("cust_id",$corpid)->where("dd_id",$userid)->field("name")->find();
+	  	     return model("User")->where("cust_id",$corpid)->where("dd_id",$userid)->field("id,name")->find();
+	  }
+
+	  //获取用户列表
+	  public function userlist($userlist){
+	  		 $corpid = session::get("corpid");
+	  	     $user = model("User")->where("cust_id",$corpid)->where("dd_id","in",$userlist)->field("name,dd_id")->select();
+	  	     $temp = [];
+	  	     foreach($user as $key=>$val){
+	  	     		 $temp[$val['dd_id']] = $val['name'];
+	  	     }
+	  	     return $temp;
 	  }
 }

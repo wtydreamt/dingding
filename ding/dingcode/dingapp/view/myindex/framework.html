@@ -1,24 +1,19 @@
 <div>
 	<div class="t-collapse" role="tablist" >
-		{volist name="office" id="val"}
-			{if condition="isset($user[$val['dingding_id']])"}
+		{volist name="user" id="val"}
 		<div class="t-collapse-item" id="ding_{$val.dingding_id}" sun="1">
-			{else /}
-		<div class="t-collapse-item" id="ding_{$val.dingding_id}" sun="0">
-			{/if}
 			<div class="t-collapse-header parent" aria-expanded="false" data="{$val.dingding_id}" style="text-align:center;background-color: #F8F8FF" role="tab" tabindex="0">
 				<i class="arrow"></i>
 				<span >{$val.name}</span>
 			</div>
-			{if condition="isset($user[$val['dingding_id']])"}
-				{volist name="user[$val['dingding_id']]" id="uv"}
+
+				{volist name="val['data']" id="uv"}
 				<div class="t-collapse-content t-collapse-content-inactive t-collapse-header item-list_{$val.dingding_id}" role="tabpanel">
 					<div class="t-collapse-header">
-						<span >{$uv.name}</span>({$val.name})
+						<span >{$uv.name}</span>({$uv.position})
 					</div>
 				</div>
 				{/volist}	
-			{/if}			
 		
 		</div>
 		{/volist}
@@ -52,17 +47,82 @@
 				$(".item-list_"+dingding_id).attr("ria-expanded",false);
 			}
 		})
-	dd.ready(function () {
-		dd.biz.navigation.setRight({
-		    show: true,//控制按钮显示， true 显示， false 隐藏， 默认true
-		    control: true,//是否控制点击事件，true 控制，false 不控制， 默认false
-		    text: '同步',//控制显示文本，空字符串表示显示默认文本
-		    onSuccess : function(result) {
-		    	alert(1);
-		    },
-		    onFail : function(err) {}
-		});
-     })			
+		dd.ready(function () {
+			dd.biz.navigation.setRight({
+			    show: true,//控制按钮显示， true 显示， false 隐藏， 默认true
+			    control: true,//是否控制点击事件，true 控制，false 不控制， 默认false
+			    text: '同步',//控制显示文本，空字符串表示显示默认文本
+			    onSuccess : function(result) {
+			    	sync();
+			    },
+			    onFail : function(err) {}
+			});
+	     })
+        function sync () {
+            dd.device.notification.confirm({
+                message     : '确定同步吗？',
+                title       : '提示',
+                buttonLabels: ['同步', '取消'],
+                onSuccess   : function (result) {
+                    if (result.buttonIndex == 0) {
+                        dd.device.notification.showPreloader({
+                            text     : '同步中...',
+                            showIcon : true,
+                            onSuccess: function (result) {
+                            	sync_begin();
+                            },
+                            onFail   : function (err) {}
+                        })
+                    }
+                },
+                onFail      : function (err) {}
+            })
+        }
+
+        function sync_begin () {
+            var depListRequest = {
+                url     : '/sync',
+                type    : 'GET',
+                dataType: 'json',
+                success : function (response) {
+                    if (response.errcode == 1) {
+                        dd.ready(function() {
+                            dd.device.notification.hidePreloader({
+                                onSuccess: function (result) {},
+                                onFail   : function (err) {}
+                            })
+                            dd.device.notification.toast({
+                                icon     : 'success',
+                                text     : '同步成功',
+                                duration : 2,
+                                delay    : 0,
+                                onSuccess: function (result) {
+                                	window.location.href="/framework?dd_nav_bgcolor=FF5E97F6";
+                                },
+                                onFail   : function (err) {}
+                            })
+                        })
+                    } else {
+                        dd.ready(function() {
+                            dd.device.notification.hidePreloader({
+                                onSuccess: function (result) {},
+                                onFail   : function (err) {}
+                            })
+                            dtoast('error', '同步失败，请稍后再试')
+                        })
+                    }
+                },
+                error   : function (err) {
+                    dd.ready(function() {
+                        dd.device.notification.hidePreloader({
+                            onSuccess: function (result) {},
+                            onFail   : function (err) {}
+                        })
+                    })
+                }
+            }
+            $.ajax(depListRequest)
+        }	     			
 	})
 </script>
 

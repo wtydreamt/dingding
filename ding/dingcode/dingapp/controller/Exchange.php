@@ -54,14 +54,18 @@ class Exchange extends Common
            if(!$goods){
             echo   ReturnJosn("G_no","400","");die;
            }
+
            $count_balance = $num * $goods['price'];
+
            if($goods['total'] < $num){
             echo   ReturnJosn("G_ok","404",array("balance"=>$count_balance,"msg"=>"商品库存不足"));die;
            }
            $user  = model("user")->where("cust_id",$corpid)->where("dd_id",$userid)->field("balance")->find();
+
            if($user['balance']*100 < $count_balance){
             echo   ReturnJosn("G_ok","405",array("balance"=>$count_balance,"msg"=>"账户福分不足"));die;
            }
+           
            $Account=model("Account")->CheckBalance();
 
            if($Account['balance']*100 > $count_balance){

@@ -88,7 +88,22 @@ function Mytrial_Status($status){
 
 }
 
-
+function code_status($status){
+         switch ($status) {
+            case '10':
+                return "全部";
+                break;
+            case '1':
+                return "收入";
+                break;
+            case '2':
+                return "支出";
+                break;
+            default:
+                return "不存在的状态";
+                break;
+         }    
+}
 
 function splitName($fullname)
 {
@@ -210,14 +225,18 @@ function splitName($fullname)
        }
 }
 
-function is_follow($create_user_id,$user_id){
+function is_follow($create_user_id,$user_list){
          $userid = get_userid();
-
-         if($userid == $create_user_id || in_array($userid,$user_id)){
+         $user_list   = array_column($user_list,'user_id');  //获取当前记录赞赏人
+         if($userid == $create_user_id || in_array($userid,$user_list)){
             return true;
          }else{
             return false;
          }
+}
+
+function count_follow($user_list){
+         return count($user_list);
 }
 
 function dateFormat($create_date)

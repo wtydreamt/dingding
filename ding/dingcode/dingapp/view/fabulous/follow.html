@@ -55,10 +55,16 @@
 
 </form>
 
-
+<script>
+    var balance = {$balance};
+    var likes_quota_c = {$likes_quota_c};
+</script>
 <script>
     $(function () {
         $('#submit').click(function () {
+                if(balance < likes_quota_c){
+                    dtoast('error', '福分不足'); return false;
+                }
                 $('form').submit();
         })
     })

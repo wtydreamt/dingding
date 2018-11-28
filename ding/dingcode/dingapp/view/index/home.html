@@ -87,18 +87,25 @@
             <div class="t-card-footer">
                 <div class="card-footer-meta">
                 </div>
-                {php} if(!is_follow($val['create_user'],$userid)){ {/php}
+                {php} if(!isset($follow[$val['like_id']]['data'])) { {/php}
+                <div class="card-footer-extra link-new down_likes" data-url="/follow?dd_nav_bgcolor=FF5E97F6&id={$val['id']}&like_id={$val['like_id']}" ><i class="fas fa-thumbs-up card-footer-hand" style="font-size: 16px;"></i><span style="color: dodgerblue;">点赞</span></div>                
+                {php} }else{ {/php}
+                
+                {php} if(!is_follow($val['create_user'],$follow[$val['like_id']]['data'])){ {/php}
                 <div class="card-footer-extra link-new down_likes" data-url="/follow?dd_nav_bgcolor=FF5E97F6&id={$val['id']}&like_id={$val['like_id']}" ><i class="fas fa-thumbs-up card-footer-hand" style="font-size: 16px;"></i><span style="color: dodgerblue;">点赞</span></div>
                 {php} }else{ {/php}
                 <div class="card-footer-extra"><i class="fas fa-thumbs-up card-footer-hand already_like"></i>已赞</div>
                 {php} } {/php}
+                {php} } {/php}
+
+
             </div>
             {if condition="(isset($follow[$val['like_id']]))"}
                              
             <!--跟赞 begin-->
             <div class="t-collapse" style="background-color: #E8E8E8">
                 <div class="t-collapse-item t-collapse-item-active parent" role="tablist">
-                    <div class="t-collapse-header my-header-class up_down" is_up="1" role="tab" aria-expanded="true"><i class="fas fa-angle-down" id='label'></i><span>已跟赞{$follow[$val['like_id']]['count']}人</span></div>
+                    <div class="t-collapse-header my-header-class up_down" is_up="1" role="tab" aria-expanded="true"><i class="fas fa-angle-down" id='label'></i><span>已跟赞{:count_follow($follow[$val['like_id']]['data'])}人</span></div>
                     <div class="t-collapse-content t-collapse-content-active" role="tabpanel" style="">
                         <div class="t-collapse-content-box">
                             <div class="collapse-content-demo" style="border: 2px solid #E8E8E8;border-width:0 2px 2px;">

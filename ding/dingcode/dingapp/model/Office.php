@@ -33,7 +33,10 @@ class Office extends Model
                                     $userlit[$dingding_id]   = $user;
                                   }
 
-                                 	$res_list = Db::table("dingding_office")->where("cust_id", $cust_id)->where("dingding_id",$dingding_id)->field('id')->find();
+                                 	$res_list = Db::table("dingding_office")
+                                              ->where("cust_id", $cust_id)
+                                              ->where("dingding_id",$dingding_id)
+                                              ->field('id')->find();
 
                                  	if($res_list){
                                      //组织架构存在进行更新
@@ -55,16 +58,27 @@ class Office extends Model
                                  	}
                                  }
                                  
-                                 if(!empty($inserlist)){
-                                 	$res=model("Office")->saveAll($inserlist, false);
-                                 }
-                                 if(!empty($updatelist)){
-                                 	$res=model("Office")->saveAll($updatelist);
-                                 }
-                                 $this->updateuser($userlit);
 
+                                try {
+                                   if(!empty($inserlist)){
+                                     $res_insert=model("Office")->saveAll($inserlist, false);
+                                     if(!$res_insert){
+                                         throw new Exception('部门信息新增失败');
+                                     }
+                                   }
+                                   if(!empty($updatelist)){
+                                    $res_save =model("Office")->saveAll($updatelist);
+                                     if(!$res_save){
+                                         throw new Exception('部门信息更新新失败');
+                                     }                                    
+                                   }
+                                   $this->updateuser($userlit);
+                                   return ReturnJosn("OK","1","");die;
+                                } catch (Exception $e) {
+                                   return ReturnJosn("NO","-1",$e->getMessage());die;
+                                }
 	  		 }else{
-	  		 	 echo $list;
+	  		 	 echo "";
 	  		 }
 	  }
 
@@ -84,37 +98,37 @@ class Office extends Model
                                         ->where("cust_id", $cust_id)->where("dd_id",$uval['userid'])
                                         ->field('id,office_id')->find();
                                         if($res_list){
-                                          $updateuser[$i]['dd_id']              = $uval['userid'];
-                                          $updateuser[$i]['cust_id']            = $cust_id;
-                                          $updateuser[$i]['id']                 = $res_list['id'];
-                                          $updateuser[$i]['name']               = $uval['name'];
-                                          $updateuser[$i]['is_dd_admin']        = ($uval['isAdmin'])?"1":0;
-                                          $updateuser[$i]['position']           = isset($uval['position'])?$uval['position']:"";
-                                          $updateuser[$i]['office_id']          = $key;
-                                          $updateuser[$i]['dd_avatar']          = $uval['avatar'];
-                                          $updateuser[$i]['update_date']        = date("Y-m-d H:i:s");
-                                          $updateuser[$i]['dingding_office_id'] = implode($uval['department'],",");                                          
+                                          $updateuser[$res_list['id']]['dd_id']              = $uval['userid'];
+                                          $updateuser[$res_list['id']]['cust_id']            = $cust_id;
+                                          $updateuser[$res_list['id']]['id']                 = $res_list['id'];
+                                          $updateuser[$res_list['id']]['name']               = $uval['name'];
+                                          $updateuser[$res_list['id']]['is_dd_admin']        = ($uval['isAdmin'])?"1":0;
+                                          $updateuser[$res_list['id']]['position']           = isset($uval['position'])?$uval['position']:"";
+                                          $updateuser[$res_list['id']]['office_id']          = $key;
+                                          $updateuser[$res_list['id']]['dd_avatar']          = $uval['avatar'];
+                                          $updateuser[$res_list['id']]['update_date']        = date("Y-m-d H:i:s");
+                                          $updateuser[$res_list['id']]['dingding_office_id'] = implode($uval['department'],",");                                          
                                         }else{
-                                          $insertuser[$i]['dd_id']              = $uval['userid'];
-                                          $insertuser[$i]['cust_id']            = $cust_id;
-                                          $insertuser[$i]['name']               = $uval['name'];
-                                          $insertuser[$i]['is_dd_admin']        = ($uval['isAdmin'])?"1":0;
-                                          $insertuser[$i]['position']           = isset($uval['position'])?$uval['position']:"";
-                                          $insertuser[$i]['office_id']          = $key;
-                                          $insertuser[$i]['dd_avatar']          = $uval['avatar'];
-                                          $insertuser[$i]['create_date']        = date("Y-m-d H:i:s");
-                                          $insertuser[$i]['dingding_office_id'] = implode($uval['department'],",");
+                                          $insertuser[$uval['userid']]['dd_id']              = $uval['userid'];
+                                          $insertuser[$uval['userid']]['cust_id']            = $cust_id;
+                                          $insertuser[$uval['userid']]['name']               = $uval['name'];
+                                          $insertuser[$uval['userid']]['is_dd_admin']        = ($uval['isAdmin'])?"1":0;
+                                          $insertuser[$uval['userid']]['position']           = isset($uval['position'])?$uval['position']:"";
+                                          $insertuser[$uval['userid']]['office_id']          = $uval['department']['0'];
+                                          $insertuser[$uval['userid']]['dd_avatar']          = $uval['avatar'];
+                                          $insertuser[$uval['userid']]['create_date']        = date("Y-m-d H:i:s");
+                                          $insertuser[$uval['userid']]['dingding_office_id'] = implode($uval['department'],",");
                                         }
                            }
 
                      }
                  }
-                                 if(!empty($insertuser)){
-                                  $res=model("user")->saveAll($insertuser);
-                                 }
-                                 if(!empty($updateuser)){
-                                  $res=model("user")->saveAll($updateuser);
-                                 }                 
+                 if(!empty($insertuser)){
+                  $res=model("user")->saveAll($insertuser);
+                 }
+                 if(!empty($updateuser)){
+                  $res=model("user")->saveAll($updateuser);
+                 }                 
 
           }
 }

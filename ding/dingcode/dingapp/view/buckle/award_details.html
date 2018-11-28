@@ -1,0 +1,89 @@
+<link rel="stylesheet" type="text/css" href="/static/css/award_details.css"/>
+<div class="card-wrap">
+    <div class="t-card card-sence">
+        <div class="t-card-header">
+            <div class="t-avatar" style="width:40px;height:40px;line-height:40px;font-size:14px;position:relative;background-color:#5EC9F6;">{:splitName($apply.name)[1]}</div>
+<!--            <img class="card-avatar" src="https://work.alibaba-inc.com/photo/WB217531.jpg?" alt="avatar">-->
+            <div class="card-header-text"><span class="card-username">{$apply.name}</span><span class="card-date">{$apply.create_date}</span></div>
+        </div>
+        <div class="t-card-body">
+            <div class="card-title">{$apply.event_name}</div>
+            <p class="card-desc">{$apply.event_desc}</p>
+        </div>
+        <div class="t-card-footer">
+            <div class="card-footer-meta">
+                <span class="card-footer-meta-item">
+<!--                    <div style="display:inline-block;line-height:0;" class="t-icon t-svg card-icon">-->
+<!--                        <div style="position:relative;"><svg name="" width="32px" height="32px" fill="#000" viewBox="0 0 1024 1024"><path d="M87.776 512c81.408-152.256 244.48-256 438.784-256 174.08 0 330.944 103.744 410.496 256h-73.792c-72.736-115.456-198.848-192-336.928-192-156.48 0-289.152 76.544-364.288 192H87.776zm0 0c81.408 152.256 244.48 256 438.784 256 174.08 0 330.944-103.744 410.496-256h-73.792c-72.736 115.456-198.848 192-336.928 192-156.48 0-289.152-76.544-364.288-192H87.776z"></path><path d="M512 608a96 96 0 1 1 0-192 96 96 0 0 1 0 192zm0-64a32 32 0 1 0 0-64 32 32 0 0 0 0 64z"></path></svg><div style="position:absolute;top:0;left:0;width:100%;height:100%;" class="t-icon-mask"></div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <span class="card-eye-count">{$apply.date}</span>
+                </span>
+                <span class="card-footer-meta-item">
+<!--                    <div style="display:inline-block;line-height:0;" class="t-icon t-svg card-icon">-->
+<!--                        <div style="position:relative;"><svg name="" width="32px" height="32px" fill="#000" viewBox="0 0 1024 1024" data-reactid=".3.0.0.2.0.1.0.0.0"><path d="M87.776 512c81.408-152.256 244.48-256 438.784-256 174.08 0 330.944 103.744 410.496 256h-73.792c-72.736-115.456-198.848-192-336.928-192-156.48 0-289.152 76.544-364.288 192H87.776zm0 0c81.408 152.256 244.48 256 438.784 256 174.08 0 330.944-103.744 410.496-256h-73.792c-72.736 115.456-198.848 192-336.928 192-156.48 0-289.152-76.544-364.288-192H87.776z"></path><path d="M512 608a96 96 0 1 1 0-192 96 96 0 0 1 0 192zm0-64a32 32 0 1 0 0-64 32 32 0 0 0 0 64z"></path></svg>-->
+<!--                            <div style="position:absolute;top:0;left:0;width:100%;height:100%;" class="t-icon-mask"></div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <span class="card-like-count"></span>
+                </span>
+            </div>
+            <div class="card-footer-extra" {if condition="($apply.status == 2)"} style="color: #5EC9F6"{/if}>{:Mytrial_Status($apply.status)}</div>
+        </div>
+    </div>
+</div>
+
+<div class="t-group-head t-demo-title" style="height: 0.5rem"></div>
+<div class="t-group-head t-demo-title">奖扣对象</div>
+
+
+    <div class="t-group-list t-BT1">
+    <div class="t-group-list-item">
+        <div class="t-field">
+            <div class="t-field-box t-field-content-box t-FBH t-FBAC">
+                <div class="t-field-label t-field-layout-h-label">
+                    <div class="t-field-layout-h-label-left"><span>{$prize_winner.name}</span></div>
+                </div>
+                <div class="t-FB1 t-PR">
+                    <div>{if condition="($prize_winner.code_b)"} D： {$prize_winner.code_b} {/if}</div>
+                    <div>{if condition="($prize_winner.code_c)"} C： {$prize_winner.code_c} {/if}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="t-group-head t-demo-title" style="height: 0.5rem"></div>
+
+<div class="timeline-demo" style="padding-top: 20px">
+<!--    <h3>终审</h3>-->
+    <div class="t-timeline has-active">
+        <div class="t-timeline-item active">
+            <div class="t-timeline-header">
+                <div class="t-timeline-header-dot active"><i class="dot-core"></i></div>
+                <div class="t-timeline-tail"></div>
+            </div>
+            <div class="t-timeline-main">
+                <div>终审</div>
+                <div class="t-timeline-main-title">{$username[$apply.end_user_id]}</div>
+                <div class="t-timeline-main-title">{$apply.end_remark}</div>
+                <div class="t-timeline-main-description">{if condition="($apply.end_date)"} {$apply.end_date} {/if}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="t-timeline">
+        <div class="t-timeline-item">
+            <div class="t-timeline-header">
+                <div class="t-timeline-header-dot"><i class="dot-core"></i></div>
+            </div>
+            <div class="t-timeline-main">
+                <div>初审</div>
+                <div class="t-timeline-main-title">{$username[$apply.first_user_id]}</div>
+                <div class="t-timeline-main-title">{$apply.first_remark}</div>
+                <div class="t-timeline-main-description">{if condition="($apply.first_date)"} {$apply.first_date} {/if}</div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -88,6 +88,7 @@ class Fabulous extends Model
 	  		 ->join("approval_event e" , " a.id = e.approval_id")
 	  		 ->join("approval_derive d", "e.id = d.a_id")
 	  		 ->where("a.corp_id",$corpid)->where("e.is_likes",1)->where("e.like_id",0)
+	  		 ->order("a.create_date desc")
 	  		 ->field("d.id,e.id as like_id,a.create_user_id as create_user, d.user_id as s_user, a.create_date as a_date,e.label,e.event_desc")
 	  		 ->group('d.a_id')->select();
 
@@ -101,6 +102,7 @@ class Fabulous extends Model
 	  		 ->join("approval_event e" , " a.id = e.approval_id")
 	  		 ->join("approval_derive d", "e.id = d.a_id")
 	  		 ->where("a.corp_id",$corpid)->where("e.is_likes",0)->where("is_month",0)
+	  		 ->order("a.create_date desc")
 	  		 ->field("a.create_user_id, a.create_date as a_date,e.event_name, count(d.a_id) as num,code_b,code_c")
 	  		 ->group('d.a_id')->select();
 
@@ -204,9 +206,12 @@ class Fabulous extends Model
              	//初审或终审通过时 发送工作通知
 		        if($type == "first" && $status == "adopt"){
 		 	          $res_send = $this->sendmsg($corpid, $info, $info['end_user_id'], $type, $status);
+
 		        }else if($type == "end" && $status == "adopt"){
 		        	  $res_send = $this->sendmsg($corpid, $info, "", $type, $status);
+
 		        }
+
 		        $res_send = json_decode($res_send,true);
 		        echo ReturnJosn("ok","0",$res_send);die;
              }else if($res == -1){
@@ -218,6 +223,7 @@ class Fabulous extends Model
 	  }
 
 	  public function sendmsg($corpid,$info,$userobj,$type="",$status=""){
+
              	 $event_data = "";
 	             $userid = model("Approvald")->where("a_id",$info['e_id'])->where("cust_id",$corpid)->field("user_id,code_b,code_c")->select();
 
@@ -247,14 +253,20 @@ class Fabulous extends Model
 					  		    }else if($val['code_b'] && $val['code_b'] < 0){
 					  		       $data['buckle_be'] = $val['code_b'];
 					  		    }
-					  		  	  		    
+					  		    //更新用户总积分
+					  		  	model("User")->where("cust_id",$corpid)->where("dd_id",$val['user_id'])->setInc("code_b",$val['code_b']); 
+					  		  	//跟新用户月度记录		    
 			  		 	        model("Approvalcount")->CheckCount($val['user_id'],$corpid,$data);
 		  		 	    }
 
 	             	$userobj = implode(",", $userlist);
 
 	             }
-
+	             if($type == "end"){
+	             	$typename = "终审";
+	             }else{
+	             	$typename = "初审";
+	             }
 	             $user_name  = model("user")->where("cust_id",$corpid)->where("dd_id","in",$userlist)->field("name")->select(); //奖扣人姓名
 
 	             $user_name  = collection($user_name)->toArray();
@@ -270,7 +282,7 @@ class Fabulous extends Model
 				 ,$first_name['name']
 				 ,$end_name['name']
 				 ,$userobj
-				 ,$event_data."测试通知","初审通过");
+				 ,$event_data,$typename."通过");
 				 return $res = SendMessage::SendWorkmsg($corpid,$json_data);
 	  }
 
@@ -292,4 +304,47 @@ class Fabulous extends Model
 	  		 $approvald->commit();  
 	  		 return "1";exit(); 	  	
 	  }
+	  //获取奖扣明细
+	  public function AdDetailed($type = "D",$date = "",$status){
+	  		 $corpid = session::get("corpid");
+	  		 $userid = session::get($corpid."userid");
+
+	  		 $query = model("Fabulous")->alias("a")
+	  		 ->join("approval_event e","a.id = e.approval_id")
+	  		 ->join("approval_derive d","d.a_id = e.id")
+	  		 ->where("a.corp_id",$corpid)->where("e.corp_id",$corpid)->where("d.cust_id",$corpid)
+	  		 ->where("d.user_id",$userid)->where('DATE_FORMAT(a.create_date,"%Y-%m") ='."'$date'");
+
+	  		 if($status != "10" ){
+	  		 $query = $query->where("a.status",$status);	
+	  		 }
+
+	  		 if($type == "D" || $type == "C"){
+	  		 $query = $query->where("e.is_likes",0)->where("e.like_id",0);
+	  		 }
+
+	  		 if($type == "D"){
+
+	  		   $res_data = $query->field("a.status,a.first_user_id,a.end_user_id,a.end_date,e.event_name,d.code_b,d.user_id,a.create_date")->select();
+
+	  		 }else if($type == "C"){
+
+	  		   $res_data = $query->where("d.code_c","<>","0")
+	  		   ->field("a.status,a.first_user_id,a.end_user_id,a.end_date,e.event_name,d.code_c,d.user_id,a.create_date")->select();
+	  		 }
+	  		 $res_data = collection($res_data)->toArray();
+	  		 $user_temp = [];
+	  		 if($res_data){
+	  		 	$first_user_id = array_column($res_data,'first_user_id');
+	  		 	$end_user_id   = array_column($res_data,'end_user_id');
+	  		 	$user_id   = array_column($res_data,'user_id');
+	  		 	$user_data = array_unique(array_merge_recursive($first_user_id,$end_user_id,$user_id));
+	  		 	$user_list = model("User")->where("cust_id",$corpid)->where("dd_id","in",$user_data)->field("name,dd_id")->select();
+	  		 	$user_list = collection($user_list)->toArray();
+	  		 	foreach($user_list as $key=>$val){
+	  		 			$user_temp[$val['dd_id']] = $val['name'];
+	  		 	}
+	  		 }
+	  		 return array($res_data,$user_temp);
+	  }	
 }
